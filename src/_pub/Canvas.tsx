@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useCallback } from 'react'
+import './Canvas.css'
 
 interface CanvasProps {
   width: number;
@@ -113,6 +114,7 @@ function Canvas({ width, height }: CanvasProps) {
       return;
     }
     const canvas: HTMLCanvasElement = canvasRef.current;
+
     canvas.addEventListener('mousedown', startPaint);
     canvas.addEventListener('mousemove', paint);
     canvas.addEventListener('mouseup', exitPaint);
@@ -148,7 +150,7 @@ function Canvas({ width, height }: CanvasProps) {
   return (
     <div>
       draw canvas test
-      <canvas ref={canvasRef} height={height} width={width} />
+      <canvas ref={canvasRef} height={height} width={width} className="box" />
     </div>
   )
 }
