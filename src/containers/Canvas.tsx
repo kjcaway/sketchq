@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import './Canvas.css'
 
 interface CanvasProps {
   width: number;
@@ -15,6 +14,9 @@ type Coordinate = {
 function Canvas({ width, height }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const webSocketUrl = "ws://localhost:8080/drawing";
+  const ws = useRef<WebSocket | null>(null);
+  const [connected, setConnected] = useState(false);
   const [isPainting, setIsPainting] = useState(false);
   const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
 
@@ -25,15 +27,23 @@ function Canvas({ width, height }: CanvasProps) {
     const canvas: HTMLCanvasElement = canvasRef.current;
     const context = canvas.getContext('2d');
     if (context) {
+      
       context.strokeStyle = 'red';
       context.lineJoin = 'round';
       context.lineWidth = 5;
 
       context.beginPath();
       context.moveTo(originalMousePosition.x, originalMousePosition.y);
-      console.log(originalMousePosition.x + "///" + originalMousePosition.y)
       context.lineTo(newMousePosition.x, newMousePosition.y);
       context.closePath();
+      if(ws.current){
+        const data = {
+          color: 'red',
+          originP : [originalMousePosition.x, originalMousePosition.y],
+          newP: [newMousePosition.x, newMousePosition.y]
+        }
+        ws.current.send(JSON.stringify(data));
+      }
 
       context.stroke();
     }
@@ -124,6 +134,27 @@ function Canvas({ width, height }: CanvasProps) {
     canvas.addEventListener('touchstart', startTouch);
     canvas.addEventListener('touchmove', touch);
     canvas.addEventListener('touchend', exitTouch);
+
+    if(!connected){
+      ws.current = new WebSocket(webSocketUrl);
+      
+      ws.current.onopen = () => {
+        console.log("connected to " + webSocketUrl);
+        setConnected(true)
+      };
+      ws.current.onerror = error => {
+        console.log("could not connect to " + webSocketUrl);
+        console.log(error);
+      };
+      ws.current.onmessage = (evt: MessageEvent) => {
+        console.log(evt.data)
+      };
+      ws.current.onclose = error => {
+        console.log("disconnect from " + webSocketUrl);
+        console.log(error);
+      };
+    }
+
     return () => {
       canvas.removeEventListener('mousedown', startPaint);
       canvas.removeEventListener('mousemove', paint);
@@ -134,7 +165,7 @@ function Canvas({ width, height }: CanvasProps) {
       canvas.removeEventListener('touchmove', touch);
       canvas.removeEventListener('touchend', exitTouch);
     };
-  }, [startPaint, paint, exitPaint]);
+  }, [startPaint, paint, exitPaint, connected]);
 
   const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
     if (!canvasRef.current) {
@@ -150,8 +181,8 @@ function Canvas({ width, height }: CanvasProps) {
 
   return (
     <div>
-      draw canvas test
-      <canvas ref={canvasRef} height={height} width={width} className="box" />
+      <h2>Draw Anything!</h2>
+      <canvas ref={canvasRef} height={height} width={width} />
     </div>
   )
 }
