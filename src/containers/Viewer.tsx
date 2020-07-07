@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useCallback } from 'react'
+import config from '../config/config.json'
 
 interface ViewerProps {
   width: number;
@@ -14,7 +15,7 @@ type Coordinate = {
 function Viewer({ width, height }: ViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const webSocketUrl = "ws://localhost:8080/drawing";
+  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.drawPath}`
   const ws = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [isPainting, setIsPainting] = useState(false);
