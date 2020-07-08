@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import config from '../config/config.json'
+import '../App.css'
 
 interface CanvasProps {
   width: number;
@@ -183,14 +184,14 @@ function Canvas({ width, height }: CanvasProps) {
   return (
     <div>
       <h2>Draw Anything!</h2>
-      <canvas ref={canvasRef} height={height} width={width} />
+      <canvas ref={canvasRef} height={height} width={width} className="canvas"/>
     </div>
   )
 }
 
 Canvas.defaultProps = {
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight
 };
 
 export default Canvas
