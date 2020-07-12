@@ -1,7 +1,6 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 // import Canvas from './_pub/Canvas'
-import HelloMessage from './_pub/HelloMessage'
 import Room from './_pub/Room'
 import Canvas from './containers/Canvas'
 import Viewer from './containers/Viewer'

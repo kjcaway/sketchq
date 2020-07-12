@@ -141,17 +141,19 @@ function Viewer({ width, height }: ViewerProps) {
       };
       ws.current.onmessage = (evt: MessageEvent) => {
         console.log(evt.data)
-        const { color, originP, newP } = JSON.parse(evt.data);
-        const originPosition = {
-          x: originP[0],
-          y: originP[1]
+        const { messageType, drawing } = JSON.parse(evt.data);
+        if(messageType === "DRAWING"){
+          const { color, originP, newP } = drawing;
+          const originPosition = {
+            x: originP[0],
+            y: originP[1]
+          }
+          const newPosition = {
+            x: newP[0],
+            y: newP[1]
+          }
+          drawLine(originPosition, newPosition);
         }
-        const newPosition = {
-          x: newP[0],
-          y: newP[1]
-        }
-        
-        drawLine(originPosition, newPosition);
       };
       ws.current.onclose = error => {
         console.log("disconnect from " + webSocketUrl);

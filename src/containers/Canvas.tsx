@@ -40,9 +40,12 @@ function Canvas({ width, height }: CanvasProps) {
       context.closePath();
       if(ws.current){
         const data = {
-          color: 'red',
-          originP : [originalMousePosition.x, originalMousePosition.y],
-          newP: [newMousePosition.x, newMousePosition.y]
+          messageType: "DRAWING",
+          drawing: {
+            color: 'red',
+            originP : [originalMousePosition.x, originalMousePosition.y],
+            newP: [newMousePosition.x, newMousePosition.y]
+          }
         }
         ws.current.send(JSON.stringify(data));
       }
