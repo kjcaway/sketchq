@@ -143,7 +143,7 @@ function Viewer({ width, height }: ViewerProps) {
         console.log(evt.data)
         const { messageType, drawing } = JSON.parse(evt.data);
         if(messageType === "DRAWING"){
-          const { color, originP, newP } = drawing;
+          const { originP, newP } = drawing;
           const originPosition = {
             x: originP[0],
             y: originP[1]

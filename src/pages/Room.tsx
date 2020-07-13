@@ -1,9 +1,9 @@
 import { AppBar, Badge, Button, ClickAwayListener, Fab, makeStyles, TextField, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import React from 'react';
+import React, { useContext } from 'react';
 import '../App.css';
 import LayoutTemplate from '../components/LayoutTemplate';
-
+import { WebSocketContext } from '../hoc/WebSocketProvider';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,8 +19,15 @@ const useStyles = makeStyles((theme) => ({
 function Room() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const ws = useContext(WebSocketContext);
 
   const handleTooltipClose = () => {
+    /** Websocket send example */
+    ws.current.send(JSON.stringify({
+      messageType: "JOIN",
+      sender: "kang"
+    }));
+
     setOpen(false);
   };
 
@@ -45,7 +52,7 @@ function Room() {
         <div className="start">
           <Fab color="primary" variant="extended">
             START!
-          </Fab>
+            </Fab>
         </div>
         <div className="chatContainerL">
           <ul className="usersL">
@@ -67,7 +74,7 @@ function Room() {
                   <Button size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen}>
                     <Badge color="error" variant="dot" >
                       강팔자
-                  </Badge>
+                    </Badge>
                   </Button>
                 </Tooltip>
               </ClickAwayListener>
@@ -93,7 +100,7 @@ function Room() {
                   placement="right-start">
                   <Button size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen2}>
                     김호중
-                  </Button>
+                    </Button>
                 </Tooltip>
               </ClickAwayListener>
             </li>
