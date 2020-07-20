@@ -1,29 +1,54 @@
-import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
+import { Badge, Button, ClickAwayListener, makeStyles, Tooltip, Typography } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
 import { WebSocketContext } from '../../hoc/WebSocketProvider';
+import { ADD_USER_SUCCESS } from '../../store/reducer/user'
 
 
 const useStyles = makeStyles((theme) => ({
   customWidth: {
-    maxWidth: 100,
+    maxWidth: 100
   },
+  userBtn: {
+    textTransform: 'none'
+  }
 }));
 
 function UserContainer() {
   const classes = useStyles();
-
-  const [open, setOpen] = React.useState(false);
+  const userList = useSelector((store: any) => store.user.userList, shallowEqual)
+  const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
+  const dispatch = useDispatch();
   const ws = useContext(WebSocketContext);
 
-  const handleTooltipClose = () => {
-    /** Websocket send example */
-    ws.current.send(JSON.stringify({
-      messageType: "JOIN",
-      sender: "kang"
-    }));
+  useEffect(() => {
+    const userName = "kang"
 
+    if (websocketStatus == 'SUCCESS') {
+      ws.current.onmessage = (evt: MessageEvent) => {
+        const { messageType, sender, chat, drawing } = JSON.parse(evt.data)
+        console.log(evt.data)
+        if (messageType == 'JOIN') {
+          dispatch({ type: ADD_USER_SUCCESS, payload: sender })
+        }
+      };
+      ws.current.send(JSON.stringify({
+        messageType: "JOIN",
+        sender: userName
+      }));
+    }
+
+    return () => {
+      /** useEffect clean */
+    };
+    // eslint-disable-next-line
+  }, [websocketStatus])
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
     setOpen(false);
   };
 
@@ -41,59 +66,56 @@ function UserContainer() {
     setOpen2(true);
   };
 
+  const UserItem = (props: any) => {
+    return (
+      <li>
+        <ClickAwayListener onClickAway={handleTooltipClose}>
+          <Tooltip
+            title="안녕하세요."
+            arrow
+            classes={{ tooltip: classes.customWidth }}
+            PopperProps={{
+              disablePortal: true,
+            }}
+            onClose={handleTooltipClose}
+            open={open}
+            disableFocusListener
+            disableHoverListener
+            disableTouchListener
+            placement="right-start">
+            <Button className={classes.userBtn} size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen}>
+              <Badge color="error" variant="dot" >
+                {props.name}
+              </Badge>
+            </Button>
+          </Tooltip>
+        </ClickAwayListener>
+      </li>
+    )
+  }
 
   return (
     <React.Fragment>
       <div className="chatContainerL">
         <ul className="usersL">
-          <li>
-            <ClickAwayListener onClickAway={handleTooltipClose}>
-              <Tooltip
-                title="안녕하세요."
-                arrow
-                classes={{ tooltip: classes.customWidth }}
-                PopperProps={{
-                  disablePortal: true,
-                }}
-                onClose={handleTooltipClose}
-                open={open}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                placement="right-start">
-                <Button size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen}>
-                  <Badge color="error" variant="dot" >
-                    강팔자
-                    </Badge>
-                </Button>
-              </Tooltip>
-            </ClickAwayListener>
-          </li>
+          {userList
+            .filter((userName: string, idx: number) => idx % 2 == 0)
+            .map((userName: string, idx: number) => {
+              return (
+                <UserItem name={userName} key={idx} />
+              )
+            })}
         </ul>
       </div>
       <div className="chatContainerR">
         <ul className="usersR">
-          <li>
-            <ClickAwayListener onClickAway={handleTooltipClose2}>
-              <Tooltip
-                title="안녕하세요."
-                arrow
-                classes={{ tooltip: classes.customWidth }}
-                PopperProps={{
-                  disablePortal: true,
-                }}
-                onClose={handleTooltipClose2}
-                open={open2}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                placement="right-start">
-                <Button size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen2}>
-                  김호중
-                    </Button>
-              </Tooltip>
-            </ClickAwayListener>
-          </li>
+          {userList
+            .filter((userName: string, idx: number) => idx % 2 == 1)
+            .map((userName: string, idx: number) => {
+              return (
+                <UserItem name={userName} key={idx} />
+              )
+            })}
         </ul>
       </div>
     </React.Fragment>
