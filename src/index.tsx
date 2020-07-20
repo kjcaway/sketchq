@@ -1,17 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-
 import { Provider } from "react-redux";
+import App from './App';
+import './index.css';
 import store from "./store/configureStore";
-import WebSocketProvider from './hoc/WebSocketProvider';
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <WebSocketProvider>
-      <App />
-    </WebSocketProvider>
+    <App />
   </Provider>
   ,
   document.getElementById('root')
