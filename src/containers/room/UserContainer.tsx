@@ -1,10 +1,10 @@
-import { Badge, Button, ClickAwayListener, makeStyles, Tooltip, Typography } from '@material-ui/core';
+import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import React, { useContext, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
 import { WebSocketContext } from '../../hoc/WebSocketProvider';
-import { ADD_USER_SUCCESS } from '../../store/reducer/user'
+import { ADD_USER_SUCCESS } from '../../store/reducer/user';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,11 +26,11 @@ function UserContainer() {
   useEffect(() => {
     const userName = "kang"
 
-    if (websocketStatus == 'SUCCESS') {
+    if (websocketStatus === 'SUCCESS') {
       ws.current.onmessage = (evt: MessageEvent) => {
         const { messageType, sender, chat, drawing } = JSON.parse(evt.data)
         console.log(evt.data)
-        if (messageType == 'JOIN') {
+        if (messageType === 'JOIN') {
           dispatch({ type: ADD_USER_SUCCESS, payload: sender })
         }
       };
@@ -99,7 +99,7 @@ function UserContainer() {
       <div className="chatContainerL">
         <ul className="usersL">
           {userList
-            .filter((userName: string, idx: number) => idx % 2 == 0)
+            .filter((userName: string, idx: number) => idx % 2 === 0)
             .map((userName: string, idx: number) => {
               return (
                 <UserItem name={userName} key={idx} />
@@ -110,7 +110,7 @@ function UserContainer() {
       <div className="chatContainerR">
         <ul className="usersR">
           {userList
-            .filter((userName: string, idx: number) => idx % 2 == 1)
+            .filter((userName: string, idx: number) => idx % 2 === 1)
             .map((userName: string, idx: number) => {
               return (
                 <UserItem name={userName} key={idx} />
