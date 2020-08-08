@@ -18,12 +18,9 @@ function Footer() {
         이용시 불편사항은 아래로 연락바랍니다.
       </Typography>
       <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
         <Link color="inherit" href="#">
           whdckstngh@naver.com
         </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
       </Typography>
     </footer>
   )

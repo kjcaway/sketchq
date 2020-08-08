@@ -13,7 +13,7 @@ export function connectSuccess(){
 }
 
 const initialState = {
-  status: 'PENDING'
+  status: 'INIT'
 }
 
 export function websocketReducer(state = initialState, action: ActionType){

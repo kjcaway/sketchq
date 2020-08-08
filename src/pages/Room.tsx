@@ -12,7 +12,6 @@ function Room() {
     <LayoutTemplate maxWidth='xl'>
       <WebSocketProvider>
         <React.Fragment>
-          <h5 className="roomTitle">Room.111</h5>
           <ButtonContainer />
           <UserContainer />
           <CanvasContainer />

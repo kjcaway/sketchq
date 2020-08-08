@@ -16,7 +16,7 @@ type Coordinate = {
 function Canvas({ width, height }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.drawPath}`
+  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.path}`
   const ws = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [isPainting, setIsPainting] = useState(false);

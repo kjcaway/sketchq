@@ -45,7 +45,7 @@ function Intro() {
           </Grid>
           <Grid item>
             <Button variant="outlined" color="primary">
-              구경하기
+              방만들기
             </Button>
           </Grid>
         </Grid>

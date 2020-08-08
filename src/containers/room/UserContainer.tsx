@@ -4,7 +4,7 @@ import React, { useContext, useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
 import { WebSocketContext } from '../../hoc/WebSocketProvider';
-import { ADD_USER_SUCCESS } from '../../store/reducer/user';
+import * as user from '../../store/reducer/user';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,14 +19,21 @@ const useStyles = makeStyles((theme) => ({
 function UserContainer() {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
+  const myId = useSelector((store: any) => store.user.myId, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
   const dispatch = useDispatch();
   const ws = useContext(WebSocketContext);
 
   useEffect(() => {
-    const userName = "kang"
-
     if (websocketStatus === 'SUCCESS') {
+      if(localStorage.getItem("userName")){
+        dispatch({ type: user.REQ_JOIN, payload: {
+          name: localStorage.getItem("userName"),
+          roomNum: 101
+        }})
+      }
+
+      /*
       ws.current.onmessage = (evt: MessageEvent) => {
         const { messageType, sender, chat, drawing } = JSON.parse(evt.data)
         console.log(evt.data)
@@ -38,10 +45,14 @@ function UserContainer() {
         messageType: "JOIN",
         sender: userName
       }));
+      */
     }
 
     return () => {
       /** useEffect clean */
+      // Mount 해제시 상태 초기화
+      dispatch({ type: user.ADD_USERS_SUCCESS, payload: [] }); 
+      dispatch({ type: user.REQ_JOIN_SUCCESS, data: "" })
     };
     // eslint-disable-next-line
   }, [websocketStatus])
@@ -99,10 +110,10 @@ function UserContainer() {
       <div className="chatContainerL">
         <ul className="usersL">
           {userList
-            .filter((userName: string, idx: number) => idx % 2 === 0)
-            .map((userName: string, idx: number) => {
+            .filter((user: user.User, idx: number) => idx % 2 === 0)
+            .map((user: user.User, idx: number) => {
               return (
-                <UserItem name={userName} key={idx} />
+                <UserItem name={user.name} key={user.id} />
               )
             })}
         </ul>
@@ -110,10 +121,10 @@ function UserContainer() {
       <div className="chatContainerR">
         <ul className="usersR">
           {userList
-            .filter((userName: string, idx: number) => idx % 2 === 1)
-            .map((userName: string, idx: number) => {
+            .filter((user: user.User, idx: number) => idx % 2 === 1)
+            .map((user: user.User, idx: number) => {
               return (
-                <UserItem name={userName} key={idx} />
+                <UserItem name={user.name} key={user.id} />
               )
             })}
         </ul>

@@ -8,7 +8,7 @@ const WebSocketContext = React.createContext<any>(null);
 export { WebSocketContext };
 
 export default ({ children }: { children: React.ReactNode }) => {
-  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.drawPath}`
+  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.path}`
   let ws = useRef<WebSocket | null>(null);
   const dispatch = useDispatch();
 
