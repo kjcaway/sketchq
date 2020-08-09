@@ -1,8 +1,8 @@
-import React, { ReactNode, useRef } from 'react';
-import config from '../config/config.json';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import config from '../config/config.json';
+import { CONNECT_SUCCESS, ON_MESSAGE_SUCCESS } from '../store/reducer/websocket';
 
-import {CONNECT_SUCCESS} from '../store/reducer/websocket'
 
 const WebSocketContext = React.createContext<any>(null);
 export { WebSocketContext };
@@ -21,6 +21,11 @@ export default ({ children }: { children: React.ReactNode }) => {
     ws.current.onclose = error => {
       console.log("disconnect from " + webSocketUrl);
       console.log(error);
+    };
+    ws.current.onmessage = (evt: MessageEvent) => {
+      const data = JSON.parse(evt.data) // {messageType: '', sender: '', ...}
+      console.log(evt.data)
+      dispatch({ type: ON_MESSAGE_SUCCESS, payload: data })
     };
   }
 

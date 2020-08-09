@@ -17,7 +17,7 @@ function Intro() {
   const [open, setOpen] = useState(false);
 
   const handleClickJoin = () => {
-    if(localStorage.getItem("userName")){
+    if(localStorage.getItem("myName")){
       history.push('/room');
     } else{
       setOpen(true);

@@ -1,9 +1,8 @@
 import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
-import { WebSocketContext } from '../../hoc/WebSocketProvider';
 import * as user from '../../store/reducer/user';
 
 
@@ -22,81 +21,55 @@ function UserContainer() {
   const myId = useSelector((store: any) => store.user.myId, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
   const dispatch = useDispatch();
-  const ws = useContext(WebSocketContext);
 
   useEffect(() => {
     if (websocketStatus === 'SUCCESS') {
-      if(localStorage.getItem("userName")){
+      if(localStorage.getItem("myName")){
         dispatch({ type: user.REQ_JOIN, payload: {
-          name: localStorage.getItem("userName"),
+          name: localStorage.getItem("myName"),
           roomNum: 101
         }})
       }
-
-      /*
-      ws.current.onmessage = (evt: MessageEvent) => {
-        const { messageType, sender, chat, drawing } = JSON.parse(evt.data)
-        console.log(evt.data)
-        if (messageType === 'JOIN') {
-          dispatch({ type: ADD_USER_SUCCESS, payload: sender })
-        }
-      };
-      ws.current.send(JSON.stringify({
-        messageType: "JOIN",
-        sender: userName
-      }));
-      */
+    } else{
+      alert('WebSocket Connection Failed!');
     }
 
     return () => {
       /** useEffect clean */
       // Mount 해제시 상태 초기화
-      dispatch({ type: user.ADD_USERS_SUCCESS, payload: [] }); 
+      dispatch({ type: user.ADD_USERS, payload: [] }); 
       dispatch({ type: user.REQ_JOIN_SUCCESS, data: "" })
     };
     // eslint-disable-next-line
   }, [websocketStatus])
 
-  const [open, setOpen] = React.useState(false);
-
   const handleTooltipClose = () => {
-    setOpen(false);
   };
 
-  const handleTooltipOpen = () => {
-    setOpen(true);
-  };
+  const UserItem = (props: {user: user.User, key:String}) => {
+    const isOpen = props.user.chat?true:false;
+    const chat = props.user.chat?props.user.chat:'';
+    const userName = props.user.name;
 
-  const [open2, setOpen2] = React.useState(false);
-
-  const handleTooltipClose2 = () => {
-    setOpen2(false);
-  };
-
-  const handleTooltipOpen2 = () => {
-    setOpen2(true);
-  };
-
-  const UserItem = (props: any) => {
     return (
       <li>
         <ClickAwayListener onClickAway={handleTooltipClose}>
           <Tooltip
-            title="안녕하세요."
+            title={chat}
             arrow
             classes={{ tooltip: classes.customWidth }}
             PopperProps={{
               disablePortal: true,
             }}
             onClose={handleTooltipClose}
-            open={open}
+            open={isOpen}
             disableFocusListener
             disableHoverListener
             disableTouchListener
             placement="right-start">
-            <Button className={classes.userBtn} size="small" startIcon={<PersonIcon />} onClick={handleTooltipOpen}>
+            <Button className={classes.userBtn} size="small" startIcon={<PersonIcon />} >
               <Badge color="error" variant="dot" >
-                {props.name}
+                {userName}
               </Badge>
             </Button>
           </Tooltip>
@@ -113,7 +86,7 @@ function UserContainer() {
             .filter((user: user.User, idx: number) => idx % 2 === 0)
             .map((user: user.User, idx: number) => {
               return (
-                <UserItem name={user.name} key={user.id} />
+                <UserItem user={user} key={user.id} />
               )
             })}
         </ul>
@@ -124,7 +97,7 @@ function UserContainer() {
             .filter((user: user.User, idx: number) => idx % 2 === 1)
             .map((user: user.User, idx: number) => {
               return (
-                <UserItem name={user.name} key={user.id} />
+                <UserItem user={user} key={user.id} />
               )
             })}
         </ul>
