@@ -42,7 +42,25 @@ function* disconnect(action: websocket.ActionType){
   }
 }
 
+function* reqCreateRoom(action: websocket.ActionType){
+  try{
+    const roomRes = yield call([defaultClient, 'post'], '/room');
+    const roomId = roomRes.data;
+    yield put(websocket.reqCreateRoomSuccess(roomId));
+    const joinRes = yield call([defaultClient, 'post'], '/join', {
+      name,
+      roomId
+    });
+    const userId = joinRes.data;
+    yield put(websocket.reqJoinRoomSuccess(userId));
+
+  } catch(error){
+
+  }
+}
+
 export default function* watchWebsocket() {
   yield takeEvery(websocket.ON_MESSAGE_SUCCESS, messageHandler);
   yield takeEvery(websocket.DISCONNECT, disconnect);
+  yield takeEvery(websocket.REQ_CREATE_ROOM, reqCreateRoom);
 }

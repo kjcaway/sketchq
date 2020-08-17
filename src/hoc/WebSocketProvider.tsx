@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import config from '../config/config.json';
 import { CONNECT_SUCCESS, ON_MESSAGE_SUCCESS, DISCONNECT } from '../store/reducer/websocket';
 
@@ -8,7 +8,10 @@ const WebSocketContext = React.createContext<any>(null);
 export { WebSocketContext };
 
 export default ({ children }: { children: React.ReactNode }) => {
-  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.path}`
+  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
+  const roomId = useSelector((store: any) => store.websocket.roomId, shallowEqual);
+  
+  const webSocketUrl = `ws://${config.socketServer.host}:${config.socketServer.port}/${config.socketServer.path}?userId=${userId}&roomId=${roomId}`
   let ws = useRef<WebSocket | null>(null);
   const dispatch = useDispatch();
 

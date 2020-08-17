@@ -4,6 +4,11 @@ export const CONNECT_SUCCESS = 'CONNECT_SUCCESS' as const;
 export const DISCONNECT = 'DISCONNECT' as const;
 export const ON_MESSAGE_SUCCESS = 'ON_MESSAGE_SUCCESS' as const;
 
+export const REQ_CREATE_ROOM = 'REQ_CREATE_ROOM' as const;
+export const REQ_CREATE_ROOM_SUCCESS = 'REQ_CREATE_ROOM_SUCCESS' as const;
+
+export const REQ_JOIN_ROOM_SUCCESS = 'REQ_JOIN_ROOM_SUCCESS' as const;
+
 export interface ActionType {
   type: string;
   payload: string & Message;
@@ -37,9 +42,31 @@ export function onMessageSuccess(payload: Message){
   }
 }
 
+export function reqCreateRoom(){
+  return {
+    type: REQ_CREATE_ROOM,
+  }
+}
+
+export function reqCreateRoomSuccess(data: string){
+  return {
+    type: REQ_CREATE_ROOM_SUCCESS,
+    data: data
+  }
+}
+
+export function reqJoinRoomSuccess(data: string){
+  return {
+    type: REQ_JOIN_ROOM_SUCCESS,
+    data: data
+  }
+}
+
 
 const initialState = {
-  status: 'INIT'
+  status: 'INIT',
+  userId: undefined,
+  roomId: undefined
 }
 
 export function websocketReducer(state = initialState, action: ActionType){
@@ -58,6 +85,23 @@ export function websocketReducer(state = initialState, action: ActionType){
       return {
         ...state,
         status: 'SUCCESS'
+      }
+    case REQ_CREATE_ROOM:
+      return {
+        ...state,
+        status: 'PENDING'
+      }
+    case REQ_CREATE_ROOM_SUCCESS:
+      return {
+        ...state,
+        status: 'SUCCESS',
+        roomId: action.data
+      }
+    case REQ_JOIN_ROOM_SUCCESS:
+      return {
+        ...state,
+        status: 'SUCCESS',
+        userId: action.data
       }
     default:
       return state

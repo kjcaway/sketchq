@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { history } from '../../store/configureStore';
 import JoinUserPop from './JoinUserPop';
+import { useSelector, shallowEqual } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   heroButtons: {
@@ -15,18 +16,20 @@ const useStyles = makeStyles((theme) => ({
 function Intro() {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
 
-  const handleClickJoin = () => {
-    if(sessionStorage.getItem("myName")){
-      history.push('/room');
-    } else{
+  const handleClickCreateRoom = () => {
+    if(!userId){
       setOpen(true);
+    } else{
+      // setOpen(true);
     }
   }
 
   const handleClose = () => {
     setOpen(false);
   }
+
   return (
     <main>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -39,13 +42,13 @@ function Intro() {
       <div className={classes.heroButtons}>
         <Grid container spacing={2} justify="center">
           <Grid item>
-            <Button variant="contained" color="primary" onClick={handleClickJoin}>
-              참가하기
+            <Button variant="contained" color="primary" onClick={handleClickCreateRoom}>
+              방만들기
             </Button>
           </Grid>
           <Grid item>
             <Button variant="outlined" color="primary">
-              방만들기
+              아무방이나 참가
             </Button>
           </Grid>
         </Grid>

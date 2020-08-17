@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { history } from '../../store/configureStore';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import * as websocket from '../../store/reducer/websocket';
 
 interface Props {
   open: boolean;
@@ -15,10 +17,12 @@ interface Props {
 
 function JoinUserPop(props: Props) {
   const [userName, setUserName] = useState('');
+  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
+  const dispatch = useDispatch();
+
 
   const handleSubmit = () => {
-    sessionStorage.setItem("myName", userName);
-    history.push('/room');
+    dispatch({type: websocket.REQ_CREATE_ROOM})
   }
 
   return (

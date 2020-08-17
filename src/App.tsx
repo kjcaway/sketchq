@@ -12,9 +12,9 @@ function App() {
     <Router history={history}>
       <Switch>
         <Route exact path="/" component={Main}></Route>
+        <Route path="/room/:roomId" component={Room}></Route>
         <Route path="/canvas" component={Canvas}></Route>
         <Route path="/viewer" component={Viewer}></Route>
-        <Route path="/room" component={Room}></Route>
       </Switch>
     </Router>
   );
