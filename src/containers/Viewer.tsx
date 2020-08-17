@@ -142,7 +142,7 @@ function Viewer({ width, height }: ViewerProps) {
       ws.current.onmessage = (evt: MessageEvent) => {
         console.log(evt.data)
         const { messageType, drawing } = JSON.parse(evt.data);
-        if(messageType === "DRAWING"){
+        if(messageType === "DRAW"){
           const { originP, newP } = drawing;
           const originPosition = {
             x: originP[0],

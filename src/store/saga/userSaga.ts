@@ -5,15 +5,14 @@ import * as user from '../reducer/user'
 
 function* fetchReqJoin(action: user.ActionType){
   try {
-    const myId = yield select((state) => state.user.myId);
-    if(!myId && !localStorage.getItem('myId')){
+    if(!sessionStorage.getItem('myId')){
       const { name, roomNum } = action.payload;
       const joinRes = yield call([defaultClient, 'post'], '/join', {
         name,
         roomNum
       });
       yield put(user.reqJoinSuccess(joinRes.data));
-      localStorage.setItem('myId', myId);
+      sessionStorage.setItem('myId', joinRes.data);
     }
 
     const usersRes = yield call([defaultClient, 'get'], '/users?roomNum=101',);

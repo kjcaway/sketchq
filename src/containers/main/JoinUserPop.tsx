@@ -17,7 +17,7 @@ function JoinUserPop(props: Props) {
   const [userName, setUserName] = useState('');
 
   const handleSubmit = () => {
-    localStorage.setItem("myName", userName);
+    sessionStorage.setItem("myName", userName);
     history.push('/room');
   }
 

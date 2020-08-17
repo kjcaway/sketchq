@@ -77,7 +77,6 @@ export function reqJoinFail(error: String){
 const initialState = {
   userList: [] as Array<User>,
   status: 'INIT',
-  myId: ''
 }
 
 export function userReducer(state = initialState, action: ActionType){
@@ -104,10 +103,7 @@ export function userReducer(state = initialState, action: ActionType){
       })
     case CHAT:
       return produce(state, draft => {
-        let user = draft.userList.find(user => user.id === action.payload.id)
-        if(user){
-          user.chat = action.data
-        }
+        draft.userList.find(user => user.id === action.payload.id)!!.chat = action.data
         draft.status = 'SUCCESS'
       })
     case REQ_JOIN:
@@ -117,7 +113,6 @@ export function userReducer(state = initialState, action: ActionType){
     case REQ_JOIN_SUCCESS:
       return produce(state, draft => {
         draft.status = 'SUCCESS'
-        draft.myId = action.data as string
       })
     case REQ_JOIN_FAIL:
       return produce(state, draft => {

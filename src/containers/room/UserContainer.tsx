@@ -18,27 +18,25 @@ const useStyles = makeStyles((theme) => ({
 function UserContainer() {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
-  const myId = useSelector((store: any) => store.user.myId, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (websocketStatus === 'SUCCESS') {
-      if(localStorage.getItem("myName")){
+      if(sessionStorage.getItem("myName")){
         dispatch({ type: user.REQ_JOIN, payload: {
-          name: localStorage.getItem("myName"),
+          name: sessionStorage.getItem("myName"),
           roomNum: 101
         }})
       }
-    } else{
-      alert('WebSocket Connection Failed!');
     }
 
     return () => {
       /** useEffect clean */
       // Mount 해제시 상태 초기화
       dispatch({ type: user.ADD_USERS, payload: [] }); 
-      dispatch({ type: user.REQ_JOIN_SUCCESS, data: "" })
+      sessionStorage.removeItem('myName');
+      sessionStorage.removeItem('myId');
     };
     // eslint-disable-next-line
   }, [websocketStatus])

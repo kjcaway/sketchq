@@ -1,13 +1,16 @@
-import { put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery, call } from "redux-saga/effects";
 import * as user from '../reducer/user';
 import * as websocket from '../reducer/websocket';
+import defaultClient from "../../lib/defaultClient";
 
 function* messageHandler(action: websocket.ActionType){
   try{
     const message = action.payload;
     switch(message.messageType){
       case 'JOIN':
-        yield put(user.addUser(message.sender))
+        if(message.sender.id !== sessionStorage.getItem('myId')){
+          yield put(user.addUser(message.sender))
+        }
         break;
       case 'LEAVE':
         yield put(user.removeUser(message.sender))
@@ -26,6 +29,20 @@ function* messageHandler(action: websocket.ActionType){
   }
 }
 
+function* disconnect(action: websocket.ActionType){
+  try{
+    const userId = action.payload;
+    const joinRes = yield call([defaultClient, 'post'], '/leave', {
+      user: {
+        id: userId
+      }
+    });
+  } catch(error){
+
+  }
+}
+
 export default function* watchWebsocket() {
   yield takeEvery(websocket.ON_MESSAGE_SUCCESS, messageHandler);
+  yield takeEvery(websocket.DISCONNECT, disconnect);
 }

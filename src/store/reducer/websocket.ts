@@ -1,6 +1,7 @@
 import { User } from './user'
 
 export const CONNECT_SUCCESS = 'CONNECT_SUCCESS' as const;
+export const DISCONNECT = 'DISCONNECT' as const;
 export const ON_MESSAGE_SUCCESS = 'ON_MESSAGE_SUCCESS' as const;
 
 export interface ActionType {
@@ -22,6 +23,13 @@ export function connectSuccess(){
   }
 }
 
+export function disconnect(payaload: string){
+  return {
+    type: DISCONNECT,
+    payload: payaload
+  }
+}
+
 export function onMessageSuccess(payload: Message){
   return {
     type: ON_MESSAGE_SUCCESS,
@@ -37,6 +45,11 @@ const initialState = {
 export function websocketReducer(state = initialState, action: ActionType){
   switch(action.type){
     case CONNECT_SUCCESS:
+      return {
+        ...state,
+        status: 'SUCCESS'
+      }
+    case DISCONNECT:
       return {
         ...state,
         status: 'SUCCESS'

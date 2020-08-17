@@ -29,8 +29,7 @@ function Canvas({ width, height }: CanvasProps) {
     const canvas: HTMLCanvasElement = canvasRef.current;
     const context = canvas.getContext('2d');
     if (context) {
-      
-      context.strokeStyle = 'red';
+      context.strokeStyle = 'black';
       context.lineJoin = 'round';
       context.lineWidth = 5;
 
@@ -40,7 +39,7 @@ function Canvas({ width, height }: CanvasProps) {
       context.closePath();
       if(ws.current){
         const data = {
-          messageType: "DRAWING",
+          messageType: "DRAW",
           drawing: {
             color: 'red',
             originP : [originalMousePosition.x, originalMousePosition.y],

@@ -12,7 +12,7 @@ function App() {
     <Router history={history}>
       <Switch>
         <Route exact path="/" component={Main}></Route>
-        <Route path="/drawer" component={Canvas}></Route>
+        <Route path="/canvas" component={Canvas}></Route>
         <Route path="/viewer" component={Viewer}></Route>
         <Route path="/room" component={Room}></Route>
       </Switch>

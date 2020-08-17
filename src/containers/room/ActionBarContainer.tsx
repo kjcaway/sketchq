@@ -1,21 +1,22 @@
 import React, { useContext, useState } from 'react'
-import { TextField, AppBar, makeStyles, Button } from '@material-ui/core'
+import { TextField, AppBar, makeStyles, Button, Toolbar } from '@material-ui/core'
 import { shallowEqual, useSelector } from 'react-redux';
 import { WebSocketContext } from '../../hoc/WebSocketProvider';
 
 const useStyles = makeStyles((theme) => ({
-  customWidth: {
-    maxWidth: 100,
-  },
   appBar: {
     top: 'auto',
     bottom: 0,
+  },
+  input: {
+    flexGrow: 1,
+    marginRight: '2rem'
   },
 }));
 
 function ActionBarContainer() {
   const classes = useStyles();
-  const myId = useSelector((store: any) => store.user.myId, shallowEqual);
+  const myId = sessionStorage.getItem('myId');
   const ws = useContext(WebSocketContext);
   const [chatMessage, setChatMessage] = useState('');
 
@@ -25,6 +26,8 @@ function ActionBarContainer() {
       sender: { id: myId },
       chat: chatMessage
     }))
+
+    setChatMessage('');
   }
 
   const handleChangeText = (e: any) => {
@@ -33,8 +36,10 @@ function ActionBarContainer() {
 
   return (
     <AppBar position="fixed" color="default" className={classes.appBar}>
-      <TextField id="filled-basic" label="정답을 입력하세요." variant="filled" onChange={handleChangeText}/>
-      <Button color="inherit" onClick={handleClickSubmit}>전송</Button>
+      <Toolbar>
+        <TextField size="small" className={classes.input} label="정답을 입력하세요." variant="outlined" value={chatMessage} onChange={handleChangeText} />
+        <Button variant="contained" color="primary" onClick={handleClickSubmit}>전송</Button>
+      </Toolbar>
     </AppBar>
   )
 }
