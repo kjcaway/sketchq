@@ -10,16 +10,19 @@ export const REQ_JOIN = 'REQ_JOIN' as const;
 export const REQ_JOIN_SUCCESS = 'REQ_JOIN_SUCCESS' as const;
 export const REQ_JOIN_FAIL = 'REQ_JOIN_FAIL' as const;
 
+export const REQ_USER_LIST = 'REQ_USER_LIST' as const;
+export const REQ_USER_LIST_SUCCESS = 'REQ_USER_LIST_SUCCESS' as const;
+
 export interface ActionType {
   type: string;
   payload: User & Array<User>;
-  data?: string;
+  data: string & Array<User>;
 }
 
 export interface User {
   id: string;
   name: string;
-  roomNum: number;
+  roomId: string;
   chat?: string;
 }
 
@@ -74,6 +77,20 @@ export function reqJoinFail(error: String){
   }
 }
 
+export function reqUserList(payload: string){
+  return {
+    type: REQ_USER_LIST,
+    payload: payload
+  }
+}
+
+export function reqUserListSuccess(data: Array<User>){
+  return {
+    type: REQ_USER_LIST_SUCCESS,
+    data: data
+  }
+}
+
 const initialState = {
   userList: [] as Array<User>,
   status: 'INIT',
@@ -117,6 +134,17 @@ export function userReducer(state = initialState, action: ActionType){
     case REQ_JOIN_FAIL:
       return produce(state, draft => {
         draft.status = 'FAIL'
+      })
+    
+    ////
+    case REQ_USER_LIST:
+      return produce(state, draft => {
+        draft.status = 'PENDING'
+      })
+    case REQ_USER_LIST_SUCCESS:
+      return produce(state, draft => {
+        draft.status = 'SUCCESS'
+        draft.userList = action.data
       })
     default:
       return state

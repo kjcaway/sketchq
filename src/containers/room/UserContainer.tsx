@@ -15,28 +15,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function UserContainer() {
+function UserContainer(props: any) {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
   const dispatch = useDispatch();
+  const { roomId } = props.match.params;
 
   useEffect(() => {
-    if (websocketStatus === 'SUCCESS') {
-      if(sessionStorage.getItem("myName")){
-        dispatch({ type: user.REQ_JOIN, payload: {
-          name: sessionStorage.getItem("myName"),
-          roomNum: 101
-        }})
-      }
-    }
+    dispatch({type: user.REQ_USER_LIST, payload: {
+      roomId: roomId
+    }})
 
     return () => {
       /** useEffect clean */
       // Mount 해제시 상태 초기화
-      dispatch({ type: user.ADD_USERS, payload: [] }); 
-      sessionStorage.removeItem('myName');
-      sessionStorage.removeItem('myId');
+      dispatch({ type: user.ADD_USERS, payload: [] }); //TODO:
     };
     // eslint-disable-next-line
   }, [websocketStatus])

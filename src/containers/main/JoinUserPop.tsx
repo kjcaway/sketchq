@@ -22,7 +22,7 @@ function JoinUserPop(props: Props) {
 
 
   const handleSubmit = () => {
-    dispatch({type: websocket.REQ_CREATE_ROOM})
+    dispatch({type: websocket.REQ_CREATE_ROOM, payload: userName })
   }
 
   return (

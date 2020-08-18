@@ -7,11 +7,12 @@ export const ON_MESSAGE_SUCCESS = 'ON_MESSAGE_SUCCESS' as const;
 export const REQ_CREATE_ROOM = 'REQ_CREATE_ROOM' as const;
 export const REQ_CREATE_ROOM_SUCCESS = 'REQ_CREATE_ROOM_SUCCESS' as const;
 
+export const REQ_JOIN_ROOM = 'REQ_JOIN_ROOM' as const;
 export const REQ_JOIN_ROOM_SUCCESS = 'REQ_JOIN_ROOM_SUCCESS' as const;
 
 export interface ActionType {
   type: string;
-  payload: string & Message;
+  payload: string & Message & User;
   data?: string;
 }
 
@@ -42,9 +43,10 @@ export function onMessageSuccess(payload: Message){
   }
 }
 
-export function reqCreateRoom(){
+export function reqCreateRoom(payload: string){
   return {
     type: REQ_CREATE_ROOM,
+    payload: payload
   }
 }
 
@@ -52,6 +54,13 @@ export function reqCreateRoomSuccess(data: string){
   return {
     type: REQ_CREATE_ROOM_SUCCESS,
     data: data
+  }
+}
+
+export function reqJoinRoom(payload: User){
+  return {
+    type: REQ_JOIN_ROOM,
+    payload: payload
   }
 }
 
@@ -96,6 +105,11 @@ export function websocketReducer(state = initialState, action: ActionType){
         ...state,
         status: 'SUCCESS',
         roomId: action.data
+      }
+    case REQ_JOIN_ROOM:
+      return {
+        ...state,
+        status: 'PENDING'
       }
     case REQ_JOIN_ROOM_SUCCESS:
       return {
