@@ -13,7 +13,7 @@ export const REQ_JOIN_ROOM_SUCCESS = 'REQ_JOIN_ROOM_SUCCESS' as const;
 export interface ActionType {
   type: string;
   payload: string & Message & User;
-  data?: string;
+  data: string & User;
 }
 
 export interface Message {
@@ -64,7 +64,7 @@ export function reqJoinRoom(payload: User){
   }
 }
 
-export function reqJoinRoomSuccess(data: string){
+export function reqJoinRoomSuccess(data: User){
   return {
     type: REQ_JOIN_ROOM_SUCCESS,
     data: data
@@ -115,7 +115,8 @@ export function websocketReducer(state = initialState, action: ActionType){
       return {
         ...state,
         status: 'SUCCESS',
-        userId: action.data
+        userId: action.data.id,
+        roomId: action.data.roomId
       }
     default:
       return state

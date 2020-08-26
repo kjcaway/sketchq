@@ -3,9 +3,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
-import { history } from '../../store/configureStore';
+import { shallowEqual, useSelector } from 'react-redux';
 import JoinUserPop from './JoinUserPop';
-import { useSelector, shallowEqual } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   heroButtons: {

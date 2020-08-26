@@ -7,23 +7,25 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import * as websocket from '../../store/reducer/websocket';
 
-interface Props {
-  open: boolean;
-  handleClose: () => void;
-}
 
-function JoinUserPop(props: Props) {
+//TODO: 추후 레이아웃 변경
+function SetNameContainer(props: any) {
   const [userName, setUserName] = useState('');
   const dispatch = useDispatch();
+  const { roomId } = props.match.params;
 
   const handleSubmit = () => {
-    dispatch({type: websocket.REQ_CREATE_ROOM, payload: userName })
+    dispatch({type: websocket.REQ_JOIN_ROOM, payload: {
+      name: userName,
+      roomId: roomId
+    }})
   }
 
   return (
-    <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-title">
+    <Dialog open={true} onClose={() => {alert("불가합니다.")}} aria-labelledby="form-title">
       <DialogTitle id="form-title">이름설정</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -45,7 +47,7 @@ function JoinUserPop(props: Props) {
         <Button onClick={handleSubmit} variant="contained" color="primary">
           시작
         </Button>
-        <Button onClick={props.handleClose} variant="contained" color="default">
+        <Button onClick={() => {alert("불가합니다.")}} variant="contained" color="default">
           취소
         </Button>
       </DialogActions>
@@ -53,4 +55,4 @@ function JoinUserPop(props: Props) {
   )
 }
 
-export default JoinUserPop
+export default withRouter(SetNameContainer);

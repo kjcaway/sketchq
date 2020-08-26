@@ -1,7 +1,7 @@
-import { call, put, takeEvery, select } from "redux-saga/effects";
+import { call, put, takeEvery } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
+import * as user from '../reducer/user';
 
-import * as user from '../reducer/user'
 
 /** Deprecated */
 function* fetchReqJoin(action: user.ActionType){
@@ -16,7 +16,7 @@ function* fetchReqJoin(action: user.ActionType){
       sessionStorage.setItem('myId', joinRes.data);
     }
 
-    const usersRes = yield call([defaultClient, 'get'], '/users?roomNum=101',);
+    const usersRes = yield call([defaultClient, 'get'], '/users?roomId=101',);
     const userList = usersRes.data as Array<any>;
     yield put(user.addUsers(userList))
   } catch(error){
@@ -26,18 +26,9 @@ function* fetchReqJoin(action: user.ActionType){
 
 function* reqUserList(action: user.ActionType){
   try {
-    //TODO: 
-    if(!sessionStorage.getItem('myId')){
-      const { name, roomId } = action.payload;
-      const joinRes = yield call([defaultClient, 'post'], '/join', {
-        name,
-        roomId
-      });
-      yield put(user.reqJoinSuccess(joinRes.data));
-      sessionStorage.setItem('myId', joinRes.data);
-    }
+    const roomId = action.payload.roomId;
 
-    const usersRes = yield call([defaultClient, 'get'], '/users?roomNum=101',);
+    const usersRes = yield call([defaultClient, 'get'], `/users?roomId=${roomId}`,);
     const userList = usersRes.data as Array<any>;
     yield put(user.addUsers(userList))
   } catch(error){

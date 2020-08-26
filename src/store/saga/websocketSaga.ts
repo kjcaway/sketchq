@@ -58,7 +58,11 @@ function* reqCreateRoom(action: websocket.ActionType){
     });
 
     const userId = joinRes.data;
-    yield put(websocket.reqJoinRoomSuccess(userId));
+    yield put(websocket.reqJoinRoomSuccess({
+      id: userId,
+      roomId: roomId,
+      name: name
+    }));
 
     yield call(() => history.push(`/room/${roomId}`));
 
@@ -76,7 +80,11 @@ function* reqJoinRoom(action: websocket.ActionType){
     });
 
     const userId = joinRes.data;
-    yield put(websocket.reqJoinRoomSuccess(userId));
+    yield put(websocket.reqJoinRoomSuccess({
+      id: userId,
+      roomId: user.roomId,
+      name: user.name
+    }));
 
     yield call(() => history.push(`/room/${user.roomId}`));
 

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
 import * as user from '../../store/reducer/user';
+import { withRouter } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -98,4 +99,4 @@ function UserContainer(props: any) {
   )
 }
 
-export default UserContainer
+export default withRouter(UserContainer)

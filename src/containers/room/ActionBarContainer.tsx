@@ -16,14 +16,15 @@ const useStyles = makeStyles((theme) => ({
 
 function ActionBarContainer() {
   const classes = useStyles();
-  const myId = sessionStorage.getItem('myId');
+  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
+  const roomId = useSelector((store: any) => store.websocket.roomId, shallowEqual);
   const ws = useContext(WebSocketContext);
   const [chatMessage, setChatMessage] = useState('');
 
   const handleClickSubmit = () => {
     ws.current.send(JSON.stringify({
       messageType: "CHAT",
-      sender: { id: myId },
+      sender: { id: userId, roomId: roomId },
       chat: chatMessage
     }))
 

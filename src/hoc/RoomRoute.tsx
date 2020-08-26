@@ -11,7 +11,7 @@ function RoomRoute({ component, ...rest }: any) {
   return (
     <Route {...rest} render={(props) => {
       if (!userId) {
-        return <Redirect to={{ pathname: '/' }} /> //TODO: 이름을 입력할 페이지
+        return <Redirect to={{ pathname: `/who/${finalRoomId}` }} />
       } else if(!finalRoomId){
         return <Redirect to={{ pathname: '/error' }} />
       } else{
