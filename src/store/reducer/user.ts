@@ -6,10 +6,6 @@ export const REMOVE_USER = 'REMOVE_USER' as const;
 
 export const CHAT = 'CHAT' as const;
 
-export const REQ_JOIN = 'REQ_JOIN' as const;
-export const REQ_JOIN_SUCCESS = 'REQ_JOIN_SUCCESS' as const;
-export const REQ_JOIN_FAIL = 'REQ_JOIN_FAIL' as const;
-
 export const REQ_USER_LIST = 'REQ_USER_LIST' as const;
 export const REQ_USER_LIST_SUCCESS = 'REQ_USER_LIST_SUCCESS' as const;
 
@@ -53,27 +49,6 @@ export function chat(user: User, chat: string){
     type: CHAT,
     payload: user,
     data: chat
-  }
-}
-
-export function reqJoin(payload: User){
-  return {
-    type: REQ_JOIN,
-    payload: payload
-  }
-}
-
-export function reqJoinSuccess(data: string){
-  return {
-    type: REQ_JOIN_SUCCESS,
-    data: data
-  }
-}
-
-export function reqJoinFail(error: String){
-  return {
-    type: REQ_JOIN_FAIL,
-    error: error
   }
 }
 
@@ -122,18 +97,6 @@ export function userReducer(state = initialState, action: ActionType){
       return produce(state, draft => {
         draft.userList.find(user => user.id === action.payload.id)!!.chat = action.data
         draft.status = 'SUCCESS'
-      })
-    case REQ_JOIN:
-      return produce(state, draft => {
-        draft.status = 'PENDING'
-      })
-    case REQ_JOIN_SUCCESS:
-      return produce(state, draft => {
-        draft.status = 'SUCCESS'
-      })
-    case REQ_JOIN_FAIL:
-      return produce(state, draft => {
-        draft.status = 'FAIL'
       })
     
     ////

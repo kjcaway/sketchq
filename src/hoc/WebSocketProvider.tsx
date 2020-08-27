@@ -24,10 +24,10 @@ export default ({ children }: { children: React.ReactNode }) => {
     ws.current.onclose = error => {
       console.log("disconnect from " + webSocketUrl);
       console.log(error);
-      dispatch({type: DISCONNECT, payload: sessionStorage.getItem('myId')})
+      dispatch({type: DISCONNECT, payload: sessionStorage.getItem('myId')}) //TODO: 클라이언트에서 처리? 서버에서 push방식?
     };
     ws.current.onmessage = (evt: MessageEvent) => {
-      const data = JSON.parse(evt.data) // {messageType: '', sender: '', ...}
+      const data = JSON.parse(evt.data) // { messageType: '', sender: {id: '', name:'', roomId: ''}, chat: '', draw: { ... } }
       console.log(evt.data)
       dispatch({ type: ON_MESSAGE_SUCCESS, payload: data })
     };
