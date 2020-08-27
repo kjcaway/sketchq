@@ -1,4 +1,4 @@
-import { put, takeEvery, call } from "redux-saga/effects";
+import { put, takeEvery, call, select } from "redux-saga/effects";
 import * as user from '../reducer/user';
 import * as websocket from '../reducer/websocket';
 import defaultClient from "../../lib/defaultClient";
@@ -9,7 +9,8 @@ function* messageHandler(action: websocket.ActionType){
     const message = action.payload;
     switch(message.messageType){
       case 'JOIN':
-        if(message.sender.id !== sessionStorage.getItem('myId')){
+        const myId = yield select((state) => state.websocket.userId)
+        if(message.sender.id !== myId){
           yield put(user.addUser(message.sender))
         }
         break;
