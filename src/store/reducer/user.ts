@@ -1,7 +1,6 @@
 import produce from 'immer';
 
 export const ADD_USER = 'ADD_USER' as const; // 누군가 방에 참가
-export const ADD_USERS = 'ADD_USERS' as const; // 처음 방에 참가시, 서버에서 참가자들 불러옴
 export const REMOVE_USER = 'REMOVE_USER' as const;
 
 export const CHAT = 'CHAT' as const;
@@ -19,20 +18,13 @@ export interface User {
   id: string;
   name: string;
   roomId: string;
+  role: number;
   chat?: string;
 }
 
 export function addUser(payload: User){
   return {
     type: ADD_USER,
-    payload: payload
-  }
-}
-
-
-export function addUsers(payload: Array<User>){
-  return {
-    type: ADD_USERS,
     payload: payload
   }
 }
@@ -77,12 +69,6 @@ export function userReducer(state = initialState, action: ActionType){
       return produce(state, draft => {
         // room user list 에 추가
         draft.userList.push(action.payload as never)
-        draft.status = 'SUCCESS'
-      })
-    case ADD_USERS:
-      return produce(state, draft => {
-        // room user list 에 모두 추가
-        draft.userList = action.payload
         draft.status = 'SUCCESS'
       })
     case REMOVE_USER:

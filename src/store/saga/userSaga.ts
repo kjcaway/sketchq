@@ -9,7 +9,7 @@ function* reqUserList(action: user.ActionType){
 
     const usersRes = yield call([defaultClient, 'get'], `/users?roomId=${roomId}`,);
     const userList = usersRes.data as Array<any>;
-    yield put(user.addUsers(userList))
+    yield put(user.reqUserListSuccess(userList))
   } catch(error){
   }
 }

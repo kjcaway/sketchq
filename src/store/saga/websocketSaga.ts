@@ -11,6 +11,7 @@ function* messageHandler(action: websocket.ActionType){
       case 'JOIN':
         const myId = yield select((state) => state.websocket.userId)
         if(message.sender.id !== myId){
+          // sender가 자기자신이면 무시
           yield put(user.addUser(message.sender))
         }
         break;
@@ -53,16 +54,19 @@ function* reqCreateRoom(action: websocket.ActionType){
     yield put(websocket.reqCreateRoomSuccess(roomId));
     
     const name = action.payload;
+    const role = 1;
     const joinRes = yield call([defaultClient, 'post'], '/join', {
       name,
-      roomId
+      roomId,
+      role
     });
 
     const userId = joinRes.data;
     yield put(websocket.reqJoinRoomSuccess({
       id: userId,
       roomId: roomId,
-      name: name
+      name: name,
+      role: role
     }));
 
     yield call(() => history.push(`/room/${roomId}`));
@@ -75,16 +79,19 @@ function* reqCreateRoom(action: websocket.ActionType){
 function* reqJoinRoom(action: websocket.ActionType){
   try{
     const user = action.payload;
+    const role = 2;
     const joinRes = yield call([defaultClient, 'post'], '/join', {
       name: user.name,
-      roomId: user.roomId
+      roomId: user.roomId,
+      role: role
     });
 
     const userId = joinRes.data;
     yield put(websocket.reqJoinRoomSuccess({
       id: userId,
       roomId: user.roomId,
-      name: user.name
+      name: user.name,
+      role: role
     }));
 
     yield call(() => history.push(`/room/${user.roomId}`));

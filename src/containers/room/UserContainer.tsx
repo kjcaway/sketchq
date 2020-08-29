@@ -1,10 +1,11 @@
 import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import '../../App.css';
 import * as user from '../../store/reducer/user';
 import { withRouter } from 'react-router-dom';
+import { WebSocketContext } from '../../hoc/WebSocketProvider';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
   },
   userBtn: {
     textTransform: 'none'
+  },
+  mine: {
+    fontWeight: 'bold'
   }
 }));
 
@@ -20,18 +24,20 @@ function UserContainer(props: any) {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
+  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual)
   const dispatch = useDispatch();
+  const ws = useContext(WebSocketContext);
   const { roomId } = props.match.params;
-
+  
   useEffect(() => {
+    /** User list 조회 */
     dispatch({type: user.REQ_USER_LIST, payload: {
       roomId: roomId
     }})
-
+    
+    
     return () => {
       /** useEffect clean */
-      // Mount 해제시 상태 초기화
-      dispatch({ type: user.ADD_USERS, payload: [] }); //TODO:
     };
     // eslint-disable-next-line
   }, [websocketStatus])
@@ -42,7 +48,9 @@ function UserContainer(props: any) {
   const UserItem = (props: {user: user.User, key:String}) => {
     const isOpen = props.user.chat?true:false;
     const chat = props.user.chat?props.user.chat:'';
-    const userName = props.user.name;
+    const name = props.user.name;
+    const role = props.user.role;
+    const id = props.user.id;
 
     return (
       <li>
@@ -61,9 +69,14 @@ function UserContainer(props: any) {
             disableTouchListener
             placement="right-start">
             <Button className={classes.userBtn} size="small" startIcon={<PersonIcon />} >
-              <Badge color="error" variant="dot" >
-                {userName}
-              </Badge>
+              {
+                role === 1?
+                <Badge color="primary" variant="dot" >
+                  <span className={userId === id?classes.mine:''}>{name}</span>
+                </Badge>
+                :
+                <span className={userId === id?classes.mine:''}>{name}</span>
+              }
             </Button>
           </Tooltip>
         </ClickAwayListener>

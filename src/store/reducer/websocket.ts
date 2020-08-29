@@ -75,6 +75,8 @@ export function reqJoinRoomSuccess(data: User){
 const initialState = {
   status: 'INIT',
   userId: undefined,
+  userName: undefined,
+  userRole: undefined,
   roomId: undefined
 }
 
@@ -116,7 +118,9 @@ export function websocketReducer(state = initialState, action: ActionType){
         ...state,
         status: 'SUCCESS',
         userId: action.data.id,
-        roomId: action.data.roomId
+        userName: action.data.name,
+        userRole: action.data.role,
+        roomId: action.data.roomId,
       }
     default:
       return state
