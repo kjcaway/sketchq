@@ -1,11 +1,10 @@
 import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import '../../App.css';
 import * as user from '../../store/reducer/user';
-import { withRouter } from 'react-router-dom';
-import { WebSocketContext } from '../../hoc/WebSocketProvider';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,7 +25,6 @@ function UserContainer(props: any) {
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
   const userId = useSelector((store: any) => store.websocket.userId, shallowEqual)
   const dispatch = useDispatch();
-  const ws = useContext(WebSocketContext);
   const { roomId } = props.match.params;
   
   useEffect(() => {

@@ -1,15 +1,17 @@
-import { put, takeEvery, call, select } from "redux-saga/effects";
-import * as user from '../reducer/user';
-import * as websocket from '../reducer/websocket';
+import { call, put, select, takeEvery } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
 import { history } from '../configureStore';
+import * as draw from '../reducer/draw';
+import * as user from '../reducer/user';
+import * as websocket from '../reducer/websocket';
 
 function* messageHandler(action: websocket.ActionType){
   try{
     const message = action.payload;
+    const myId = yield select((state) => state.websocket.userId)
+    const myRole = yield select((state) => state.websocket.userRole)
     switch(message.messageType){
       case 'JOIN':
-        const myId = yield select((state) => state.websocket.userId)
         if(message.sender.id !== myId){
           // sender가 자기자신이면 무시
           yield put(user.addUser(message.sender))
@@ -22,7 +24,9 @@ function* messageHandler(action: websocket.ActionType){
         yield put(user.chat(message.sender, message.chat))
         break;
       case 'DRAW':
-        //TODO:
+        if(message.sender.id !== myId && myRole === 2){
+          yield put(draw.draw(message.drawing))
+        }
         break;
       default:
         break;
