@@ -21,11 +21,12 @@ function* messageHandler(action: websocket.ActionType){
         yield put(user.removeUser(message.sender))
         break;
       case 'CHAT':
-        yield put(user.chat(message.sender, message.chat))
+        message.sender.chat = message.chat;
+        yield put(user.chat(message.sender))
         break;
       case 'DRAW':
         if(message.sender.id !== myId && myRole === 2){
-          yield put(draw.draw(message.drawing))
+          yield put(draw.draw(message.drawing as draw.Drawing))
         }
         break;
       default:
@@ -38,7 +39,7 @@ function* messageHandler(action: websocket.ActionType){
 
 function* disconnect(action: websocket.ActionType){
   try{
-    //TODO:
+    //TODO: leave myself case
     const userId = action.payload;
     const joinRes = yield call([defaultClient, 'post'], '/leave', {
       user: {

@@ -30,7 +30,7 @@ export default ({ children }: { children: React.ReactNode }) => {
       console.log(error);
     };
     ws.current.onmessage = (evt: MessageEvent) => {
-      const data = JSON.parse(evt.data) // { messageType: '', sender: {id: '', name:'', roomId: ''}, chat: '', draw: { ... } }
+      const data = JSON.parse(evt.data) // { messageType: '', sender: {id: '', name:'', roomId: '', role: 1}, chat: '', drawing: { ... } }
       console.log(evt.data)
       dispatch({ type: ON_MESSAGE_SUCCESS, payload: data })
     };

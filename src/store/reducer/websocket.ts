@@ -1,4 +1,5 @@
 import { User } from './user'
+import { Drawing } from './draw';
 
 export const CONNECT_SUCCESS = 'CONNECT_SUCCESS' as const;
 export const DISCONNECT = 'DISCONNECT' as const;
@@ -13,14 +14,13 @@ export const REQ_JOIN_ROOM_SUCCESS = 'REQ_JOIN_ROOM_SUCCESS' as const;
 export interface ActionType {
   type: string;
   payload: string & Message & User;
-  data: string & User;
 }
 
 export interface Message {
   messageType: string;
   sender: User;
   chat: string;
-  drawing?: any;
+  drawing?: Drawing;
 }
 
 export function connectSuccess(){
@@ -50,10 +50,10 @@ export function reqCreateRoom(payload: string){
   }
 }
 
-export function reqCreateRoomSuccess(data: string){
+export function reqCreateRoomSuccess(payload: string){
   return {
     type: REQ_CREATE_ROOM_SUCCESS,
-    data: data
+    data: payload
   }
 }
 
@@ -64,10 +64,10 @@ export function reqJoinRoom(payload: User){
   }
 }
 
-export function reqJoinRoomSuccess(data: User){
+export function reqJoinRoomSuccess(payload: User){
   return {
     type: REQ_JOIN_ROOM_SUCCESS,
-    data: data
+    data: payload
   }
 }
 
@@ -106,7 +106,7 @@ export function websocketReducer(state = initialState, action: ActionType){
       return {
         ...state,
         status: 'SUCCESS',
-        roomId: action.data
+        roomId: action.payload
       }
     case REQ_JOIN_ROOM:
       return {
@@ -117,10 +117,10 @@ export function websocketReducer(state = initialState, action: ActionType){
       return {
         ...state,
         status: 'SUCCESS',
-        userId: action.data.id,
-        userName: action.data.name,
-        userRole: action.data.role,
-        roomId: action.data.roomId,
+        userId: action.payload.id,
+        userName: action.payload.name,
+        userRole: action.payload.role,
+        roomId: action.payload.roomId,
       }
     default:
       return state

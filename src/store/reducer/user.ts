@@ -10,8 +10,7 @@ export const REQ_USER_LIST_SUCCESS = 'REQ_USER_LIST_SUCCESS' as const;
 
 export interface ActionType {
   type: string;
-  payload: User & Array<User>;
-  data: string & Array<User>;
+  payload: string & User & Array<User>;
 }
 
 export interface User {
@@ -36,11 +35,10 @@ export function removeUser(payload: User){
   }
 }
 
-export function chat(user: User, chat: string){
+export function chat(user: User){
   return {
     type: CHAT,
-    payload: user,
-    data: chat
+    payload: user
   }
 }
 
@@ -51,10 +49,10 @@ export function reqUserList(payload: string){
   }
 }
 
-export function reqUserListSuccess(data: Array<User>){
+export function reqUserListSuccess(payload: Array<User>){
   return {
     type: REQ_USER_LIST_SUCCESS,
-    data: data
+    payload: payload
   }
 }
 
@@ -81,7 +79,7 @@ export function userReducer(state = initialState, action: ActionType){
       })
     case CHAT:
       return produce(state, draft => {
-        draft.userList.find(user => user.id === action.payload.id)!!.chat = action.data
+        draft.userList.find(user => user.id === action.payload.id)!!.chat = action.payload.chat
         draft.status = 'SUCCESS'
       })
     
@@ -93,7 +91,7 @@ export function userReducer(state = initialState, action: ActionType){
     case REQ_USER_LIST_SUCCESS:
       return produce(state, draft => {
         draft.status = 'SUCCESS'
-        draft.userList = action.data
+        draft.userList = action.payload
       })
     default:
       return state

@@ -2,17 +2,20 @@ export const DRAW = 'DRAW' as const;
 
 export interface ActionType {
   type: string;
-  data: any;
+  payload: Drawing;
 }
 
+export interface Drawing {
+  originP: Array<number>;
+  newP: Array<number>;
+}
 
-export function draw(data: any){
+export function draw(payload: Drawing){
   return {
     type: DRAW,
-    data: data
+    payload: payload
   }
 }
-
 
 const initialState = {
   status: 'INIT',
@@ -28,10 +31,10 @@ export function drawReducer(state = initialState, action: ActionType){
       return {
         ...state,
         status: 'DRAW',
-        originX: action.data.originP[0],
-        originY: action.data.originP[1],
-        newX: action.data.newP[0],
-        newY: action.data.newP[1],
+        originX: action.payload.originP[0],
+        originY: action.payload.originP[1],
+        newX: action.payload.newP[0],
+        newY: action.payload.newP[1],
       }
     default:
       return state
