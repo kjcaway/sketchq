@@ -61,7 +61,7 @@ function CanvasContainer({ width, height }: CanvasProps) {
             id: userId
           },
           drawing: {
-            color: 'red',
+            color: 'black',
             originP : [originalMousePosition.x, originalMousePosition.y],
             newP: [newMousePosition.x, newMousePosition.y]
           }

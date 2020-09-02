@@ -1,6 +1,9 @@
 export const REQ_START_GAME = 'REQ_START_GAME' as const; 
 export const REQ_START_GAME_SUCCESS = 'REQ_START_GAME_SUCCESS' as const; 
 
+export const START_GAME = 'START_GAME' as const; 
+export const READY = 'READY' as const; 
+
 export interface ActionType {
   type: string;
   payload: any;
@@ -20,8 +23,21 @@ export function reqStartGameSuccess(payload: any){
   }
 }
 
+export function startGame(){
+  return {
+    type: START_GAME
+  }
+}
+
+export function ready(){
+  return {
+    type: READY
+  }
+}
+
 const initialState = {
   status: 'INIT',
+  word: undefined
 }
 
 export function gameReducer(state = initialState, action: ActionType){
@@ -29,12 +45,24 @@ export function gameReducer(state = initialState, action: ActionType){
     case REQ_START_GAME:
       return {
         ...state,
-        status: 'PENDING',
+        status: 'PENDING'
       }
     case REQ_START_GAME_SUCCESS:
       return {
         ...state,
         status: 'RUNNING',
+        word: action.payload
+      }
+    case START_GAME:
+      return {
+        ...state,
+        status: 'RUNNING'
+      }
+    case READY:
+      return {
+        ...state,
+        status: 'PENDING',
+        word: undefined
       }
     default:
       return state

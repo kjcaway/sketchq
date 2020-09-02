@@ -1,9 +1,10 @@
-import { call, put, select, takeEvery } from "redux-saga/effects";
+import { call, put, select, takeEvery, delay } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
 import { history } from '../configureStore';
 import * as draw from '../reducer/draw';
 import * as user from '../reducer/user';
 import * as websocket from '../reducer/websocket';
+import * as game from '../reducer/game';
 
 function* messageHandler(action: websocket.ActionType){
   try{
@@ -13,7 +14,7 @@ function* messageHandler(action: websocket.ActionType){
     switch(message.messageType){
       case 'JOIN':
         if(message.sender.id !== myId){
-          // sender가 자기자신이면 무시
+          // sender가 다른 사람일 경우
           yield put(user.addUser(message.sender))
         }
         break;
@@ -26,8 +27,20 @@ function* messageHandler(action: websocket.ActionType){
         break;
       case 'DRAW':
         if(message.sender.id !== myId && myRole === 2){
+          // sender가 다른 사람일 경우
           yield put(draw.draw(message.drawing as draw.Drawing))
         }
+        break;
+      case 'START':
+        if(message.sender.id !== myId && myRole === 2){
+          // sender가 다른 사람일 경우
+          yield put(game.startGame())
+        }
+        break;
+      case 'HIT':
+        yield put(user.hitWord(message.sender))
+        yield delay(3000)
+        yield put(game.ready())
         break;
       default:
         break;

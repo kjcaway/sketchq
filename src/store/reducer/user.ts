@@ -8,6 +8,8 @@ export const CHAT = 'CHAT' as const;
 export const REQ_USER_LIST = 'REQ_USER_LIST' as const;
 export const REQ_USER_LIST_SUCCESS = 'REQ_USER_LIST_SUCCESS' as const;
 
+export const HIT_WORD = 'HIT_WORD' as const;
+
 export interface ActionType {
   type: string;
   payload: string & User & Array<User>;
@@ -56,9 +58,17 @@ export function reqUserListSuccess(payload: Array<User>){
   }
 }
 
+export function hitWord(payload: User){
+  return {
+    type: HIT_WORD,
+    payload: payload
+  }
+}
+
 const initialState = {
   userList: [] as Array<User>,
   status: 'INIT',
+  hitUserId: '' 
 }
 
 export function userReducer(state = initialState, action: ActionType){
@@ -92,6 +102,12 @@ export function userReducer(state = initialState, action: ActionType){
       return produce(state, draft => {
         draft.status = 'SUCCESS'
         draft.userList = action.payload
+      })
+
+    case HIT_WORD:
+      return produce(state, draft => {
+        draft.status = 'SUCCESS'
+        draft.hitUserId = action.payload.id
       })
     default:
       return state

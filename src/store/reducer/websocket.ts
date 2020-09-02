@@ -53,7 +53,7 @@ export function reqCreateRoom(payload: string){
 export function reqCreateRoomSuccess(payload: string){
   return {
     type: REQ_CREATE_ROOM_SUCCESS,
-    data: payload
+    payload: payload
   }
 }
 
@@ -67,7 +67,7 @@ export function reqJoinRoom(payload: User){
 export function reqJoinRoomSuccess(payload: User){
   return {
     type: REQ_JOIN_ROOM_SUCCESS,
-    data: payload
+    payload: payload
   }
 }
 
