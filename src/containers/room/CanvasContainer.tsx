@@ -145,6 +145,15 @@ function CanvasContainer({ width, height }: CanvasProps) {
     canvas.dispatchEvent(mouseEvent);
   }, []);
 
+  const clearCanvas = () => {
+    if (!canvasRef.current) {
+      return;
+    }
+
+    const canvas: HTMLCanvasElement = canvasRef.current;
+    canvas.getContext('2d')!!.clearRect(0, 0, canvas.width, canvas.height);;
+  }
+
   useEffect(() => {
     if (!canvasRef.current) {
       return;

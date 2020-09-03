@@ -31,16 +31,21 @@ function ButtonContainer() {
   }
 
   return (
-    <div className="start">
+    <div className="topBtnDiv">
       {
         gameStatus === 'RUNNING' ? pushStartSignal():null
       }
       {
         userRole === 1 ?
           gameStatus === 'RUNNING' ?
-            <Fab color="primary" variant="extended">
-              제시어: {gameWord}
-            </Fab>
+            <>
+              <Fab color="primary" variant="extended">
+                제시어: {gameWord}
+              </Fab>
+              <Fab color="default" variant="extended" size="small" className="tool">
+                모두 지우기
+              </Fab>
+            </>
             :
             <Fab color="primary" variant="extended" onClick={handleClickStart}>
               시작하기

@@ -24,7 +24,6 @@ function getUserList(users: any) {
   return users;
 }
 
-
 function UserContainer(props: any) {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
@@ -50,7 +49,7 @@ function UserContainer(props: any) {
   const handleTooltipClose = () => {
   };
 
-  const UserItem = React.memo(function(props: {user: user.User, key: string, hit: string}) {
+  const UserItem = React.memo(function UserItem(props: {user: user.User, key: string, hit: string}) {
     const isOpen = props.user.chat?true:false;
     const chat = props.user.chat?props.user.chat:'';
     const name = props.user.name;
@@ -60,7 +59,7 @@ function UserContainer(props: any) {
 
     return (
       <li>
-        <ClickAwayListener onClickAway={handleTooltipClose}>
+        <div>
           <Tooltip
             title={chat}
             arrow
@@ -85,7 +84,7 @@ function UserContainer(props: any) {
               }
             </Button>
           </Tooltip>
-        </ClickAwayListener>
+        </div>
       </li>
     )
   })
