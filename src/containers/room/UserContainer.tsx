@@ -1,6 +1,6 @@
 import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
-import ThumbUpAltTwoToneIcon from '@material-ui/icons/ThumbUpAltTwoTone';
+import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import React, { useEffect, useMemo, memo } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,16 +13,16 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 100
   },
   userBtn: {
-    textTransform: 'none'
+    textTransform: 'none',
   },
   mine: {
     fontWeight: 'bold'
-  }
+  },
+  creator: {
+    fontSize: '9px'
+  },
 }));
 
-function getUserList(users: any) {
-  return users;
-}
 
 function UserContainer(props: any) {
   const classes = useStyles();
@@ -32,14 +32,16 @@ function UserContainer(props: any) {
   const userId = useSelector((store: any) => store.websocket.userId, shallowEqual)
   const dispatch = useDispatch();
   const { roomId } = props.match.params;
-  
+
   useEffect(() => {
     /** User list 조회 */
-    dispatch({type: user.REQ_USER_LIST, payload: {
-      roomId: roomId
-    }})
-    
-    
+    dispatch({
+      type: user.REQ_USER_LIST, payload: {
+        roomId: roomId
+      }
+    })
+
+
     return () => {
       /** useEffect clean */
     };
@@ -49,9 +51,9 @@ function UserContainer(props: any) {
   const handleTooltipClose = () => {
   };
 
-  const UserItem = React.memo(function UserItem(props: {user: user.User, key: string, hit: string}) {
-    const isOpen = props.user.chat?true:false;
-    const chat = props.user.chat?props.user.chat:'';
+  const UserItem = React.memo(function UserItem(props: { user: user.User, key: string, hit: string, pos: string }) {
+    const isOpen = props.user.chat ? true : false;
+    const chat = props.user.chat ? props.user.chat : '';
     const name = props.user.name;
     const role = props.user.role;
     const id = props.user.id;
@@ -59,58 +61,52 @@ function UserContainer(props: any) {
 
     return (
       <li>
-        <div>
-          <Tooltip
-            title={chat}
-            arrow
-            classes={{ tooltip: classes.customWidth }}
-            PopperProps={{
-              disablePortal: true,
-            }}
-            onClose={handleTooltipClose}
-            open={isOpen}
-            disableFocusListener
-            disableHoverListener
-            disableTouchListener
-            placement="right-start">
-            <Button className={classes.userBtn} size="small" startIcon={id === hit?<ThumbUpAltTwoToneIcon />:<PersonIcon />} >
-              {
-                role === 1?
-                <Badge color="primary" variant="dot" >
-                  <span className={userId === id?classes.mine:''}>{name}</span>
-                </Badge>
-                :
-                <span className={userId === id?classes.mine:''}>{name}</span>
-              }
-            </Button>
-          </Tooltip>
-        </div>
+        {
+          (isOpen && props.pos === 'right') &&
+          <div className={'balloon ' + props.pos}>
+            <span>{chat}</span>
+          </div>
+        }
+        <Button className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
+          {
+            role === 1 ?
+              <Badge color="secondary" variant="dot">
+                <span className={userId === id ? classes.mine : ''}>{name}</span>
+              </Badge>
+              :
+              <span className={userId === id ? classes.mine : ''}>{name}</span>
+          }
+        </Button>
+        {
+          (isOpen && props.pos === 'left') &&
+          <div className={'balloon ' + props.pos}>
+            <span>{chat}</span>
+          </div>
+        }
       </li>
     )
   })
-  
-  const memUserList = useMemo(() => getUserList(userList), [userList]);
 
   return (
     <React.Fragment>
       <div className="chatContainerL">
         <ul className="usersL">
-          {memUserList
+          {userList
             .filter((user: user.User, idx: number) => idx % 2 === 0)
             .map((user: user.User, idx: number) => {
               return (
-                <UserItem user={user} key={user.id} hit={hitUserId}/>
+                <UserItem user={user} key={user.id} hit={hitUserId} pos="left" />
               )
             })}
         </ul>
       </div>
       <div className="chatContainerR">
         <ul className="usersR">
-          {memUserList
+          {userList
             .filter((user: user.User, idx: number) => idx % 2 === 1)
             .map((user: user.User, idx: number) => {
               return (
-                <UserItem user={user} key={user.id} hit={hitUserId}/>
+                <UserItem user={user} key={user.id} hit={hitUserId} pos="right" />
               )
             })}
         </ul>
