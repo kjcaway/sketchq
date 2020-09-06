@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback, useContext } from 'react'
 import '../../App.css';
 import { WebSocketContext } from '../../hoc/WebSocketProvider';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import * as draw from '../../store/reducer/draw';
 
 interface CanvasProps {
   width: number;
@@ -21,10 +22,13 @@ function CanvasContainer({ width, height }: CanvasProps) {
   const [mousePosition, setMousePosition] = useState<Coordinate | undefined>(undefined);
   const [isPainting, setIsPainting] = useState(false);
   
+  const drawStatus = useSelector((store: any) => store.draw.status);
   const originX = useSelector((store: any) => store.draw.originX);
   const originY = useSelector((store: any) => store.draw.originY);
   const newX = useSelector((store: any) => store.draw.newX);
   const newY = useSelector((store: any) => store.draw.newY);
+  
+  const dispatch = useDispatch();
 
   const getCoordinates = (event: MouseEvent): Coordinate | undefined => {
     if (!canvasRef.current) {
@@ -151,7 +155,9 @@ function CanvasContainer({ width, height }: CanvasProps) {
     }
 
     const canvas: HTMLCanvasElement = canvasRef.current;
-    canvas.getContext('2d')!!.clearRect(0, 0, canvas.width, canvas.height);;
+    canvas.getContext('2d')!!.clearRect(0, 0, canvas.width, canvas.height);
+
+    dispatch({type: draw.INIT})
   }
 
   useEffect(() => {
@@ -186,6 +192,9 @@ function CanvasContainer({ width, height }: CanvasProps) {
     <div className="canvas" >
       {
         userRole === 2?drawLine({x: originX, y: originY}, {x: newX, y: newY}):null
+      }
+      {
+        drawStatus === 'CLEAR'?clearCanvas():null
       }
       <canvas ref={canvasRef} height={height} width={width} />
     </div>

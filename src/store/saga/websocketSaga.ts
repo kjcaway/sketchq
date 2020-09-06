@@ -42,6 +42,9 @@ function* messageHandler(action: websocket.ActionType){
         yield delay(3000)
         yield put(game.ready())
         break;
+      case 'CLEAR':
+        yield put(draw.clear())
+        break;
       default:
         break;
     }

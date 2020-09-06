@@ -1,12 +1,12 @@
-import { Badge, Button, ClickAwayListener, makeStyles, Tooltip } from '@material-ui/core';
+import { Badge, Button, makeStyles, withStyles } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
-import React, { useEffect, useMemo, memo } from 'react';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import '../../App.css';
 import * as user from '../../store/reducer/user';
-
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   customWidth: {
@@ -17,12 +17,18 @@ const useStyles = makeStyles((theme) => ({
   },
   mine: {
     fontWeight: 'bold'
-  },
-  creator: {
-    fontSize: '9px'
-  },
+  }
 }));
 
+const ColorButton = withStyles((theme) => ({
+  root: {
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[500],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+}))(Button);
 
 function UserContainer(props: any) {
   const classes = useStyles();
@@ -48,9 +54,6 @@ function UserContainer(props: any) {
     // eslint-disable-next-line
   }, [websocketStatus])
 
-  const handleTooltipClose = () => {
-  };
-
   const UserItem = React.memo(function UserItem(props: { user: user.User, key: string, hit: string, pos: string }) {
     const isOpen = props.user.chat ? true : false;
     const chat = props.user.chat ? props.user.chat : '';
@@ -67,16 +70,30 @@ function UserContainer(props: any) {
             <span>{chat}</span>
           </div>
         }
-        <Button className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
-          {
-            role === 1 ?
-              <Badge color="secondary" variant="dot">
+        {
+          hit === id?
+          <ColorButton className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
+            {
+              role === 1 ?
+                <Badge color="secondary" variant="dot">
+                  <span className={userId === id ? classes.mine : ''}>{name}</span>
+                </Badge>
+                :
                 <span className={userId === id ? classes.mine : ''}>{name}</span>
-              </Badge>
-              :
-              <span className={userId === id ? classes.mine : ''}>{name}</span>
-          }
-        </Button>
+            }
+          </ColorButton>
+          :
+          <Button className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
+            {
+              role === 1 ?
+                <Badge color="secondary" variant="dot">
+                  <span className={userId === id ? classes.mine : ''}>{name}</span>
+                </Badge>
+                :
+                <span className={userId === id ? classes.mine : ''}>{name}</span>
+            }
+          </Button>
+        }
         {
           (isOpen && props.pos === 'left') &&
           <div className={'balloon ' + props.pos}>

@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as websocket from '../../store/reducer/websocket';
 
-
 //TODO: 추후 레이아웃 변경
 function SetNameContainer(props: any) {
   const [userName, setUserName] = useState('');
@@ -24,8 +23,12 @@ function SetNameContainer(props: any) {
     }})
   }
 
+  const handleClose = () => {
+    window.location.href = '/';
+  }
+
   return (
-    <Dialog open={true} onClose={() => {alert("불가합니다.")}} aria-labelledby="form-title">
+    <Dialog open={true} onClose={handleClose} aria-labelledby="form-title">
       <DialogTitle id="form-title">이름설정</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -47,7 +50,7 @@ function SetNameContainer(props: any) {
         <Button onClick={handleSubmit} variant="contained" color="primary">
           시작
         </Button>
-        <Button onClick={() => {alert("불가합니다.")}} variant="contained" color="default">
+        <Button onClick={handleClose} variant="contained" color="default">
           취소
         </Button>
       </DialogActions>

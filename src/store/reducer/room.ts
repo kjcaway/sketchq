@@ -8,6 +8,11 @@ export interface ActionType {
   payload: any;
 }
 
+export interface Room {
+  id: string;
+  roomName: string;
+}
+
 export function reqRoomList(payload: any){
   return {
     type: REQ_ROOM_LIST,
@@ -15,7 +20,7 @@ export function reqRoomList(payload: any){
   }
 }
 
-export function reqRoomListSuccess(payload: any){
+export function reqRoomListSuccess(payload: Array<Room>){
   return {
     type: REQ_ROOM_LIST_SUCCESS,
     payload: payload
@@ -24,10 +29,10 @@ export function reqRoomListSuccess(payload: any){
 
 const initialState = {
   status: 'INIT',
-  roomList: []
+  roomList: [] as Array<Room>
 }
 
-export function gameReducer(state = initialState, action: ActionType){
+export function roomReducer(state = initialState, action: ActionType){
   switch(action.type){
     case REQ_ROOM_LIST:
       return produce(state, draft => {

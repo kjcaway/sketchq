@@ -5,13 +5,13 @@ import * as room from '../reducer/room';
 
 function* reqRoomList(action: room.ActionType){
   try {
-    const startRes = yield call([defaultClient, 'get'], `/rooms`);
-    const data = startRes.data;
+    const res = yield call([defaultClient, 'get'], `/rooms`);
+    const data = res.data;
     yield put(room.reqRoomListSuccess(data));
   } catch(error){
   }
 }
 
-export default function* watchGame() {
+export default function* watchRoom() {
   yield takeEvery(room.REQ_ROOM_LIST, reqRoomList);
 }

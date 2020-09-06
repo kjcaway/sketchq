@@ -9,12 +9,13 @@
   position: absolute;
   top: 1%;
   width: 100%;
-  justify-content: left;
+  justify-content: space-between;
 }
 
 .topBtnDiv .tool {
-  margin-left: 5px;
+  margin-right: 5%
 }
+
 .chatContainerL {
   position: absolute;
   z-index: 100;
@@ -92,4 +93,9 @@
 }
 .right {
   margin-right: 5%;
+}
+
+.hitTxt {
+  color: greenyellow;
+  font-weight: bold;
 }

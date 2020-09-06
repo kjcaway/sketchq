@@ -1,4 +1,6 @@
 export const DRAW = 'DRAW' as const; 
+export const CLEAR = 'CLEAR' as const; 
+export const INIT = 'INIT' as const; 
 
 export interface ActionType {
   type: string;
@@ -14,6 +16,18 @@ export function draw(payload: Drawing){
   return {
     type: DRAW,
     payload: payload
+  }
+}
+
+export function clear(){
+  return {
+    type: CLEAR,
+  }
+}
+
+export function init(){
+  return {
+    type: INIT,
   }
 }
 
@@ -35,6 +49,24 @@ export function drawReducer(state = initialState, action: ActionType){
         originY: action.payload.originP[1],
         newX: action.payload.newP[0],
         newY: action.payload.newP[1],
+      }
+    case CLEAR:
+      return {
+        ...state,
+        status: 'CLEAR',
+        originX: undefined,
+        originY: undefined,
+        newX: undefined,
+        newY: undefined
+      }
+    case INIT:
+      return {
+        ...state,
+        status: 'INIT',
+        originX: undefined,
+        originY: undefined,
+        newX: undefined,
+        newY: undefined
       }
     default:
       return state

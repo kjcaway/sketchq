@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useState } from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import JoinUserPop from './JoinUserPop';
+import { history } from '../../store/configureStore';
 
 const useStyles = makeStyles((theme) => ({
   heroButtons: {
@@ -29,6 +30,10 @@ function Intro() {
     setOpen(false);
   }
 
+  const handleClickGoRoomList = () => {
+    history.push('/rooms');
+  }
+
   return (
     <main>
       <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
@@ -42,12 +47,12 @@ function Intro() {
         <Grid container spacing={2} justify="center">
           <Grid item>
             <Button variant="contained" color="primary" onClick={handleClickCreateRoom}>
-              방만들기
+              방 만들기
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="outlined" color="primary">
-              아무방이나 참가
+            <Button variant="outlined" color="primary" onClick={handleClickGoRoomList}>
+              방 목록
             </Button>
           </Grid>
         </Grid>
