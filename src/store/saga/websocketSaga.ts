@@ -66,12 +66,15 @@ function* disconnect(action: websocket.ActionType){
 
 function* reqCreateRoom(action: websocket.ActionType){
   try{
-    const roomRes = yield call([defaultClient, 'post'], '/room');
+    const name = action.payload;
+    const roomName = name + '님의 방'
+    const roomRes = yield call([defaultClient, 'post'], '/room',{
+      roomName: roomName
+    });
     const roomId = roomRes.data;
     
     yield put(websocket.reqCreateRoomSuccess(roomId));
     
-    const name = action.payload;
     const role = 1;
     const joinRes = yield call([defaultClient, 'post'], '/join', {
       name,

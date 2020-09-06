@@ -92,7 +92,6 @@ export function userReducer(state = initialState, action: ActionType){
         draft.userList.find(user => user.id === action.payload.id)!!.chat = action.payload.chat
         draft.status = 'SUCCESS'
       })
-    
     ////
     case REQ_USER_LIST:
       return produce(state, draft => {
@@ -103,7 +102,6 @@ export function userReducer(state = initialState, action: ActionType){
         draft.status = 'SUCCESS'
         draft.userList = action.payload
       })
-
     case HIT_WORD:
       return produce(state, draft => {
         draft.status = 'SUCCESS'
