@@ -4,6 +4,7 @@ import { websocketReducer as websocket } from './websocket';
 import { drawReducer as draw } from './draw';
 import { gameReducer as game } from './game';
 import { roomReducer as room } from './room';
+import { baseReducer as base } from './base';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
   websocket,
   draw,
   game,
-  room
+  room,
+  base
 })
 
 export default rootReducer

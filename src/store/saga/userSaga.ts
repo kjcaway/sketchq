@@ -1,6 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
 import * as user from '../reducer/user';
+import * as base from '../reducer/base';
 
 
 function* reqUserList(action: user.ActionType){
@@ -11,6 +12,11 @@ function* reqUserList(action: user.ActionType){
     const userList = usersRes.data as Array<any>;
     yield put(user.reqUserListSuccess(userList))
   } catch(error){
+    yield put(base.openDialog({
+      type: 'error',
+      title: '요청 실패',
+      contents: 'API 요청에 실패했습니다.',
+    }));
   }
 }
 

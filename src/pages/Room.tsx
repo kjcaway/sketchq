@@ -6,6 +6,7 @@ import ButtonContainer from '../containers/room/ButtonContainer';
 import CanvasContainer from '../containers/room/CanvasContainer';
 import UserContainer from '../containers/room/UserContainer';
 import WebSocketProvider from '../hoc/WebSocketProvider';
+import Base from '../containers/Base';
 
 function Room() {
   return (
@@ -16,6 +17,7 @@ function Room() {
           <UserContainer />
           <CanvasContainer />
           <ActionBarContainer />
+          <Base />
         </React.Fragment>
       </WebSocketProvider>
     </LayoutTemplate>

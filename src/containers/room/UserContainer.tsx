@@ -9,9 +9,6 @@ import * as user from '../../store/reducer/user';
 import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
-  customWidth: {
-    maxWidth: 100
-  },
   userBtn: {
     textTransform: 'none',
   },

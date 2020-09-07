@@ -5,6 +5,7 @@ import * as draw from '../reducer/draw';
 import * as user from '../reducer/user';
 import * as websocket from '../reducer/websocket';
 import * as game from '../reducer/game';
+import * as base from '../reducer/base';
 
 function* messageHandler(action: websocket.ActionType){
   try{
@@ -49,7 +50,11 @@ function* messageHandler(action: websocket.ActionType){
         break;
     }
   } catch(error){
-
+    yield put(base.openDialog({
+      type: 'error',
+      title: '알 수 없는 메시지 형태',
+      contents: '알 수 없는 응답값이 전송되었습니다.',
+    }));
   }
 }
 
@@ -96,7 +101,11 @@ function* reqCreateRoom(action: websocket.ActionType){
     yield call(() => history.push(`/room/${roomId}`));
 
   } catch(error){
-
+    yield put(base.openDialog({
+      type: 'error',
+      title: '요청 실패',
+      contents: 'API 요청에 실패했습니다.',
+    }));
   }
 }
 
@@ -121,7 +130,11 @@ function* reqJoinRoom(action: websocket.ActionType){
     yield call(() => history.push(`/room/${user.roomId}`));
 
   } catch(error){
-
+    yield put(base.openDialog({
+      type: 'error',
+      title: '요청 실패',
+      contents: 'API 요청에 실패했습니다.',
+    }));
   }
 }
 
