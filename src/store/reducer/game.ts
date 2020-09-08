@@ -45,7 +45,7 @@ export function gameReducer(state = initialState, action: ActionType){
     case REQ_START_GAME:
       return {
         ...state,
-        status: 'PENDING'
+        status: 'REQUEST'
       }
     case REQ_START_GAME_SUCCESS:
       return {

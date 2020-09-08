@@ -1,8 +1,9 @@
 import axios from 'axios';
+import config from '../config/config.json';
 
 const baseURL = (() => {
   if (process.env.NODE_ENV === 'development') {
-    return 'http://localhost:8080/'
+    return `http://${config.socketServer.host}:${config.socketServer.port}/`
   } else if (process.env.NODE_ENV === 'production') {
     return '/'
   } else {

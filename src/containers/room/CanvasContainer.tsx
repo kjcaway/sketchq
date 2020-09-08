@@ -27,6 +27,7 @@ function CanvasContainer({ width, height }: CanvasProps) {
   const originY = useSelector((store: any) => store.draw.originY);
   const newX = useSelector((store: any) => store.draw.newX);
   const newY = useSelector((store: any) => store.draw.newY);
+  const drawColor = useSelector((store: any) => store.draw.color);
   
   const dispatch = useDispatch();
 
@@ -48,8 +49,10 @@ function CanvasContainer({ width, height }: CanvasProps) {
     }
     const canvas: HTMLCanvasElement = canvasRef.current;
     const context = canvas.getContext('2d');
+    const color = drawColor.toLowerCase();
+
     if (context) {
-      context.strokeStyle = 'black';
+      context.strokeStyle = color;
       context.lineJoin = 'round';
       context.lineWidth = 5;
 
@@ -65,7 +68,7 @@ function CanvasContainer({ width, height }: CanvasProps) {
             id: userId
           },
           drawing: {
-            color: 'black',
+            color: color,
             originP : [originalMousePosition.x, originalMousePosition.y],
             newP: [newMousePosition.x, newMousePosition.y]
           }

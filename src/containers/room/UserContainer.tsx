@@ -1,4 +1,5 @@
 import { Badge, Button, makeStyles, withStyles } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import React, { useEffect } from 'react';
@@ -6,7 +7,6 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import '../../App.css';
 import * as user from '../../store/reducer/user';
-import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   userBtn: {
