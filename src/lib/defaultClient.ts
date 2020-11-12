@@ -5,7 +5,7 @@ const baseURL = (() => {
   if (process.env.NODE_ENV === 'development') {
     return `http://${config.socketServer.host}:${config.socketServer.port}/`
   } else if (process.env.NODE_ENV === 'production') {
-    return '/'
+    return `http://${config.socketServer.host}:${config.socketServer.port}/`
   } else {
     return '/'
   }
