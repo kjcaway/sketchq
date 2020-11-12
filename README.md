@@ -11,3 +11,6 @@ SketchQ project front-end
 ### Feature
 - Use websocket
 - Realtime chatting and drawing
+
+### Release Environment
+- S3 (Hosting)
