@@ -4,6 +4,9 @@ export const REQ_START_GAME_SUCCESS = 'REQ_START_GAME_SUCCESS' as const;
 export const START_GAME = 'START_GAME' as const; 
 export const READY = 'READY' as const; 
 
+export const REQ_CHANGE_CREATOR = 'REQ_CHANGE_CREATOR' as const; 
+export const REQ_CHANGE_CREATOR_SUCCESS = 'REQ_CHANGE_CREATOR_SUCCESS' as const; 
+
 export interface ActionType {
   type: string;
   payload: any;
@@ -35,6 +38,23 @@ export function ready(){
   }
 }
 
+
+export function reqChangeCreator(payload: any){
+  return {
+    type: REQ_CHANGE_CREATOR,
+    payload: payload
+  }
+}
+
+export function reqChangeCreatorSuccess(payload: any){
+  return {
+    type: REQ_CHANGE_CREATOR_SUCCESS,
+    payload: payload
+  }
+}
+
+
+
 const initialState = {
   status: 'INIT',
   word: undefined
@@ -63,6 +83,14 @@ export function gameReducer(state = initialState, action: ActionType){
         ...state,
         status: 'PENDING',
         word: undefined
+      }
+    case REQ_CHANGE_CREATOR:
+      return {
+        ...state,
+      }
+    case REQ_CHANGE_CREATOR_SUCCESS:
+      return {
+        ...state,
       }
     default:
       return state

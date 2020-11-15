@@ -96,7 +96,12 @@ function ButtonContainer() {
   }
 
   const handleClickChangeCreator = () =>{
-    //TODO: 방장 변경 
+    dispatch({ 
+      type: game.REQ_CHANGE_CREATOR, 
+      payload: {
+        id: userId,
+        roomId: roomId
+    }});
   }
 
   return (

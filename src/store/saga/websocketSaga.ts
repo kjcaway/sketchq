@@ -46,6 +46,17 @@ function* messageHandler(action: websocket.ActionType){
       case 'CLEAR':
         yield put(draw.clear())
         break;
+      case 'ROLECHANGE':
+        // sender == creator
+        yield put(user.changeRole(message.sender))
+        if(message.sender.id !== myId){
+          message.sender.role = 2
+          yield put(websocket.setRole(message.sender))
+        } else{
+          message.sender.role = 1
+          yield put(websocket.setRole(message.sender))
+        }
+        break;
       default:
         break;
     }

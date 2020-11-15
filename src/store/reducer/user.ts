@@ -1,4 +1,5 @@
 import produce from 'immer';
+import { CHANGE_COLOR } from './draw';
 
 export const ADD_USER = 'ADD_USER' as const; // 누군가 방에 참가
 export const REMOVE_USER = 'REMOVE_USER' as const;
@@ -9,6 +10,8 @@ export const REQ_USER_LIST = 'REQ_USER_LIST' as const;
 export const REQ_USER_LIST_SUCCESS = 'REQ_USER_LIST_SUCCESS' as const;
 
 export const HIT_WORD = 'HIT_WORD' as const;
+
+export const CHANGE_ROLE = 'CHANGE_ROLE' as const;
 
 export interface ActionType {
   type: string;
@@ -65,6 +68,13 @@ export function hitWord(payload: User){
   }
 }
 
+export function changeRole(payload: User){
+  return {
+    type: CHANGE_ROLE,
+    payload: payload
+  }
+}
+
 const initialState = {
   userList: [] as Array<User>,
   status: 'INIT',
@@ -92,7 +102,6 @@ export function userReducer(state = initialState, action: ActionType){
         draft.userList.find(user => user.id === action.payload.id)!!.chat = action.payload.chat
         draft.status = 'SUCCESS'
       })
-    ////
     case REQ_USER_LIST:
       return produce(state, draft => {
         draft.status = 'PENDING'
@@ -106,6 +115,12 @@ export function userReducer(state = initialState, action: ActionType){
       return produce(state, draft => {
         draft.status = 'SUCCESS'
         draft.hitUserId = action.payload.id
+      })
+    case CHANGE_ROLE:
+      return produce(state, draft => {
+        draft.userList.forEach(user => user.role = 0)
+        draft.userList.find(user => user.id === action.payload.id)!!.role = 1
+        draft.status = 'SUCCESS'
       })
     default:
       return state

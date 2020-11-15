@@ -19,6 +19,22 @@ function* reqStart(action: game.ActionType){
   }
 }
 
+function* reqChnageCreator(action: game.ActionType){
+  try {
+    const user = action.payload
+    const res = yield call([defaultClient, 'post'], `/rolechange`, user);
+    const data = res.data;
+    yield put(game.reqChangeCreatorSuccess(data));
+  } catch(error){
+    yield put(base.openDialog({
+      type: 'error',
+      title: '요청 실패',
+      contents: 'API 요청에 실패했습니다.',
+    }));
+  }
+}
+
 export default function* watchGame() {
   yield takeEvery(game.REQ_START_GAME, reqStart);
+  yield takeEvery(game.REQ_CHANGE_CREATOR, reqChnageCreator);
 }

@@ -11,6 +11,8 @@ export const REQ_CREATE_ROOM_SUCCESS = 'REQ_CREATE_ROOM_SUCCESS' as const;
 export const REQ_JOIN_ROOM = 'REQ_JOIN_ROOM' as const;
 export const REQ_JOIN_ROOM_SUCCESS = 'REQ_JOIN_ROOM_SUCCESS' as const;
 
+export const SET_ROLE = 'SET_ROLE' as const;
+
 export interface ActionType {
   type: string;
   payload: string & Message & User;
@@ -71,6 +73,13 @@ export function reqJoinRoomSuccess(payload: User){
   }
 }
 
+export function setRole(payload: User){
+  return {
+    type: SET_ROLE,
+    payload: payload
+  }
+}
+
 
 const initialState = {
   status: 'INIT',
@@ -121,6 +130,11 @@ export function websocketReducer(state = initialState, action: ActionType){
         userName: action.payload.name,
         userRole: action.payload.role,
         roomId: action.payload.roomId,
+      }
+    case SET_ROLE:
+      return {
+        ...state,
+        userRole: action.payload.role
       }
     default:
       return state
