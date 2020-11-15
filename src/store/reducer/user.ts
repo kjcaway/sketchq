@@ -1,5 +1,4 @@
 import produce from 'immer';
-import { CHANGE_COLOR } from './draw';
 
 export const ADD_USER = 'ADD_USER' as const; // 누군가 방에 참가
 export const REMOVE_USER = 'REMOVE_USER' as const;

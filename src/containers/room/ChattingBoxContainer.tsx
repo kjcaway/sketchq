@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ActionBarContainer() {
+function ChattingBoxContainer() {
   const classes = useStyles();
   const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
   const roomId = useSelector((store: any) => store.websocket.roomId, shallowEqual);
@@ -32,17 +32,20 @@ function ActionBarContainer() {
   }
 
   const handleChangeText = (e: any) => {
+    if(e.target.value.length > 15){
+      e.target.value = e.target.value.substr(0,15)
+    }
     setChatMessage(e.target.value);
   }
 
   return (
     <AppBar position="fixed" color="default" className={classes.appBar}>
       <Toolbar>
-        <TextField size="small" className={classes.input} label="정답을 입력하세요." variant="outlined" value={chatMessage} onChange={handleChangeText} />
+        <TextField size="small" className={classes.input} label="정답을 입력하세요.(15자 이하)" variant="outlined" value={chatMessage} onChange={handleChangeText} />
         <Button variant="contained" color="primary" onClick={handleClickSubmit}>전송</Button>
       </Toolbar>
     </AppBar>
   )
 }
 
-export default ActionBarContainer
+export default ChattingBoxContainer

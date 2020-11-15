@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import LayoutTemplate from '../components/LayoutTemplate';
-import ActionBarContainer from '../containers/room/ActionBarContainer';
+import ChattingBoxContainer from '../containers/room/ChattingBoxContainer';
 import ButtonContainer from '../containers/room/ButtonContainer';
 import CanvasContainer from '../containers/room/CanvasContainer';
 import UserContainer from '../containers/room/UserContainer';
@@ -16,7 +16,7 @@ function Room() {
           <ButtonContainer />
           <UserContainer />
           <CanvasContainer />
-          <ActionBarContainer />
+          <ChattingBoxContainer />
           <Base />
         </React.Fragment>
       </WebSocketProvider>

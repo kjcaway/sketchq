@@ -39,11 +39,16 @@ function SetNameContainer(props: any) {
           margin="dense"
           id="userName"
           name="userName"
-          label="이름"
+          label="이름(5자이하)"
           type="text"
           fullWidth
           value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={(e) => {
+            if(e.target.value.length > 5){
+              e.target.value = e.target.value.substr(0,5)
+            }
+            setUserName(e.target.value)
+          }}
         />
       </DialogContent>
       <DialogActions>
