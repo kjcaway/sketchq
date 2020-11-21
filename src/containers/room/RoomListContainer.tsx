@@ -61,7 +61,7 @@ function RoomListContainer() {
                   <ListItemIcon>
                     <MeetingRoomTwoToneIcon />
                   </ListItemIcon>
-                  <ListItemText primary={room.roomName}/>
+                  <ListItemText primary={room.roomName} secondary={room.created}/>
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="back" onClick={() => handleClickEnterRoom(room.id)}>
                       <Typography variant="button" align="center" color="textSecondary" paragraph>

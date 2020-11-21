@@ -11,6 +11,7 @@ export interface ActionType {
 export interface Room {
   id: string;
   roomName: string;
+  created: string;
 }
 
 export function reqRoomList(payload: any){
