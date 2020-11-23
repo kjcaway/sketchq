@@ -15,9 +15,9 @@ export interface Drawing {
   color: Color;
 }
 
-export type Color = 'red' | 'blue' | 'green' | 'black';
+export type Color = 'red' | 'blue' | 'green' | 'black' | 'white';
 
-export const colorList = ['BLACK', 'RED', 'GREEN', 'BLUE'];
+export const colorList = ['BLACK', 'RED', 'GREEN', 'BLUE', 'WHITE'];
 
 export function draw(payload: Drawing){
   return {

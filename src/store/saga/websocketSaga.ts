@@ -46,7 +46,7 @@ function* messageHandler(action: websocket.ActionType){
         yield put(user.hitWord(message.sender))
         yield put(base.openAlert({
           category: 'success',
-          contents: `${message.sender.name}님 정답입니다. (정답 : ${message.chat})`
+          contents: `${message.sender.name}님 정답입니다.(정답 : ${message.chat})`
         }))
         yield delay(3000)
         yield put(game.ready())

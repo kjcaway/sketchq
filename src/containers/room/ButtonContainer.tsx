@@ -11,6 +11,7 @@ import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import { red, green, blue} from '@material-ui/core/colors'
 import * as draw from '../../store/reducer/draw';
+import * as base from '../../store/reducer/base';
 
 const useStyles = makeStyles((theme) => ({
   colorBox: {
@@ -29,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
   blue: {
     backgroundColor: blue[500],
   },
+  white: {
+    backgroundColor: '#ffffff',
+  },
   menuPop: {
     zIndex: 500
   }
@@ -36,12 +40,13 @@ const useStyles = makeStyles((theme) => ({
 
 function ButtonContainer() {
   const classes = useStyles();
-  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual);
+  const myId = useSelector((store: any) => store.websocket.userId, shallowEqual);
+  const myRole = useSelector((store: any) => store.websocket.userRole, shallowEqual);
   const roomId = useSelector((store: any) => store.websocket.roomId, shallowEqual);
-  const userRole = useSelector((store: any) => store.websocket.userRole, shallowEqual);
   const gameStatus = useSelector((store: any) => store.game.status, shallowEqual);
   const gameWord = useSelector((store: any) => store.game.word, shallowEqual);
   const drawColor = useSelector((store: any) => store.draw.color, shallowEqual);
+  const userList = useSelector((store: any) => store.user.userList, shallowEqual);
   const ws = useContext(WebSocketContext);
   const dispatch = useDispatch();
 
@@ -72,7 +77,7 @@ function ButtonContainer() {
     dispatch({ 
       type: game.REQ_START_GAME, 
       payload: {
-        id: userId,
+        id: myId,
         roomId: roomId
     }});
   }
@@ -80,7 +85,7 @@ function ButtonContainer() {
   const pushStartSignal = () => {
     ws.current.send(JSON.stringify({
       messageType: "START",
-      sender: { id: userId, roomId: roomId },
+      sender: { id: myId, roomId: roomId },
     }));
   }
 
@@ -91,17 +96,26 @@ function ButtonContainer() {
   const handleClickClear = () =>{
     ws.current.send(JSON.stringify({
       messageType: "CLEAR",
-      sender: { id: userId, roomId: roomId },
+      sender: { id: myId, roomId: roomId },
     }));
   }
 
   const handleClickChangeCreator = () =>{
-    dispatch({ 
-      type: game.REQ_CHANGE_CREATOR, 
-      payload: {
-        id: userId,
-        roomId: roomId
-    }});
+    if(userList.length > 1){
+      dispatch({ 
+        type: game.REQ_CHANGE_CREATOR, 
+        payload: {
+          id: myId,
+          roomId: roomId
+      }});
+    } else{
+      dispatch({ 
+        type: base.OPEN_ALERT, 
+        payload: {
+          category: "warning",
+          contents: "다른 사람이 있어야 권한을 넘길수 있습니다."
+      }});
+    }
   }
 
   return (
@@ -110,7 +124,7 @@ function ButtonContainer() {
         gameStatus === 'REQUEST' ? pushStartSignal():null
       }
       {
-        userRole === 1 ?
+        myRole === 1 ?
           // 방장
           gameStatus === 'RUNNING' ?
             <>
@@ -118,22 +132,14 @@ function ButtonContainer() {
                 제시어: {gameWord}
               </Fab>
               <ButtonGroup variant="outlined" color="primary" ref={anchorRef} aria-label="split button">
-                <Button>
+                <Button
+                  aria-controls={open ? 'split-button-menu' : undefined}
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleToggle}
+                >
                   <Avatar variant="square" className={clsx(classes.colorBox, classes[drawColor.toLowerCase() as draw.Color])} >
                     &nbsp;
                   </Avatar>
-                  {drawColor}
-                </Button>
-                <Button
-                  color="primary"
-                  size="small"
-                  aria-controls={open ? 'split-button-menu' : undefined}
-                  aria-expanded={open ? 'true' : undefined}
-                  aria-label="툴박스"
-                  aria-haspopup="menu"
-                  onClick={handleToggle}
-                >
-                  <ArrowDropDownIcon />
                 </Button>
               </ButtonGroup>
               <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal className={classes.menuPop}>
@@ -158,7 +164,6 @@ function ButtonContainer() {
                                   <Avatar variant="square" className={clsx(classes.colorBox, classes[color.toLowerCase() as draw.Color])} >
                                     &nbsp;
                                   </Avatar>
-                                  {color}
                                 </MenuItem>
                               )
                             })
