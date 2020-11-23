@@ -1,5 +1,4 @@
-import { Badge, Button, makeStyles, withStyles } from '@material-ui/core';
-import { green } from '@material-ui/core/colors';
+import { Badge, Button, createStyles, makeStyles, Theme, withStyles } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined';
 import React, { useEffect } from 'react';
@@ -17,22 +16,33 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const ColorButton = withStyles((theme) => ({
-  root: {
-    color: theme.palette.getContrastText(green[500]),
-    backgroundColor: green[500],
-    '&:hover': {
-      backgroundColor: green[700],
+// const ColorButton = withStyles((theme) => ({
+//   root: {
+//     color: theme.palette.getContrastText(green[500]),
+//     backgroundColor: green[500],
+//     '&:hover': {
+//       backgroundColor: green[700],
+//     },
+//   },
+// }))(Button);
+
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      right: -3,
+      border: `2px solid ${theme.palette.background.paper}`,
+      padding: '0 4px',
+      fontSize: 9
     },
-  },
-}))(Button);
+  }),
+)(Badge);
 
 function UserContainer(props: any) {
   const classes = useStyles();
   const userList = useSelector((store: any) => store.user.userList, shallowEqual)
   const hitUserId = useSelector((store: any) => store.user.hitUserId, shallowEqual)
   const websocketStatus = useSelector((store: any) => store.websocket.status, shallowEqual)
-  const userId = useSelector((store: any) => store.websocket.userId, shallowEqual)
+  const myId = useSelector((store: any) => store.websocket.userId, shallowEqual)
   const dispatch = useDispatch();
   const { roomId } = props.match.params;
 
@@ -57,7 +67,6 @@ function UserContainer(props: any) {
     const name = props.user.name;
     const role = props.user.role;
     const id = props.user.id;
-    const hit = props.hit;
 
     return (
       <li>
@@ -68,26 +77,14 @@ function UserContainer(props: any) {
           </div>
         }
         {
-          hit === id?
-          <ColorButton className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
+          <Button className={classes.userBtn} size="small" startIcon={myId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
             {
               role === 1 ?
-                <Badge color="secondary" variant="dot">
-                  <span className={userId === id ? classes.mine : ''}>{name}</span>
-                </Badge>
+                <StyledBadge color="secondary" badgeContent="K">
+                  <span className={myId === id ? classes.mine : ''}>{name}</span>
+                </StyledBadge>
                 :
-                <span className={userId === id ? classes.mine : ''}>{name}</span>
-            }
-          </ColorButton>
-          :
-          <Button className={classes.userBtn} size="small" startIcon={userId === id ? <PersonIcon /> : <PersonOutlineOutlinedIcon />} >
-            {
-              role === 1 ?
-                <Badge color="secondary" variant="dot">
-                  <span className={userId === id ? classes.mine : ''}>{name}</span>
-                </Badge>
-                :
-                <span className={userId === id ? classes.mine : ''}>{name}</span>
+                <span className={myId === id ? classes.mine : ''}>{name}</span>
             }
           </Button>
         }

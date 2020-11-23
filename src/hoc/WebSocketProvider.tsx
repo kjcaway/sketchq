@@ -41,7 +41,7 @@ export default ({ children }: { children: React.ReactNode }) => {
       
       dispatch({
         type: base.OPEN_DIALOG, payload: {
-          type: 'error',
+          category: 'error',
           title: '소켓 연결 실패',
           contents: '연결에 실패 하였습니다.'
         }

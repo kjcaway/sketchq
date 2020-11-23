@@ -11,7 +11,7 @@ function* reqRoomList(action: room.ActionType){
     yield put(room.reqRoomListSuccess(data));
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '요청 실패',
       contents: 'API 요청에 실패했습니다.',
     }));

@@ -32,10 +32,10 @@ const useStyles = makeStyles({
 
 function CommonDialog() {
   const classes = useStyles();
-  const isShow = useSelector((store: any) => store.base.isShow);
-  const title = useSelector((store: any) => store.base.title);
-  const contents = useSelector((store: any) => store.base.contents);
-  const type = useSelector((store: any) => store.base.type);
+  const isShow = useSelector((store: any) => store.base.dialog.isShow);
+  const title = useSelector((store: any) => store.base.dialog.title);
+  const contents = useSelector((store: any) => store.base.dialog.contents);
+  const category = useSelector((store: any) => store.base.dialog.category);
   const dispatch = useDispatch();
 
   const handleClick = () => {
@@ -55,11 +55,11 @@ function CommonDialog() {
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle id="alert-dialog-slide-title" className={type === 'success' ? classes.successColor : classes.failColor}>
+      <DialogTitle id="alert-dialog-slide-title" className={category === 'success' ? classes.successColor : classes.failColor}>
         <Typography>
           <IconButton edge="start" color="inherit" >
             {
-              type === 'success' ? <SentimentVerySatisfiedIcon /> : <SentimentVeryDissatisfiedIcon />
+              category === 'success' ? <SentimentVerySatisfiedIcon /> : <SentimentVeryDissatisfiedIcon />
             }
           </IconButton>
           {title}

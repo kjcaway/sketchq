@@ -37,9 +37,17 @@ function* messageHandler(action: websocket.ActionType){
           // sender가 다른 사람일 경우
           yield put(game.startGame())
         }
+        yield put(base.openAlert({
+          category: 'info',
+          contents: '게임을 시작합니다.'
+        }))
         break;
       case 'HIT':
         yield put(user.hitWord(message.sender))
+        yield put(base.openAlert({
+          category: 'success',
+          contents: `${message.sender.name}님 정답입니다. (정답 : ${message.chat})`
+        }))
         yield delay(3000)
         yield put(game.ready())
         break;
@@ -62,7 +70,7 @@ function* messageHandler(action: websocket.ActionType){
     }
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '알 수 없는 메시지 형태',
       contents: '알 수 없는 응답값이 전송되었습니다.',
     }));
@@ -113,7 +121,7 @@ function* reqCreateRoom(action: websocket.ActionType){
 
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '요청 실패',
       contents: 'API 요청에 실패했습니다.',
     }));
@@ -142,7 +150,7 @@ function* reqJoinRoom(action: websocket.ActionType){
 
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '요청 실패',
       contents: 'API 요청에 실패했습니다.',
     }));

@@ -12,7 +12,7 @@ function* reqStart(action: game.ActionType){
     yield put(game.reqStartGameSuccess(data));
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '요청 실패',
       contents: 'API 요청에 실패했습니다.',
     }));
@@ -27,7 +27,7 @@ function* reqChnageCreator(action: game.ActionType){
     yield put(game.reqChangeCreatorSuccess(data));
   } catch(error){
     yield put(base.openDialog({
-      type: 'error',
+      category: 'error',
       title: '요청 실패',
       contents: 'API 요청에 실패했습니다.',
     }));
