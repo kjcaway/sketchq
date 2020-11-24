@@ -8,6 +8,13 @@ export const OPEN_ALERT = 'OPEN_ALERT' as const;
 export const CLOSE_ALERT = 'CLOSE_ALERT' as const;
 export const INIT_ALERT = 'INIT_ALERT' as const;
 
+export const OPEN_CONFIRM = 'OPEN_CONFIRM' as const;
+export const CLOSE_CONFIRM = 'CLOSE_CONFIRM' as const;
+export const OK_CONFIRM = 'OK_CONFIRM' as const;
+export const CANCEL_CONFIRM = 'CLOSE_CONFIRM' as const;
+
+
+
 export interface ActionType {
   type: string;
   payload: any;
@@ -51,6 +58,31 @@ export function initAlert(){
   }
 }
 
+export function openConfirm(payload: any){
+  return {
+    type: OPEN_CONFIRM,
+    payload: payload
+  }
+}
+
+export function closeConfirm(){
+  return {
+    type: CLOSE_CONFIRM,
+  }
+}
+
+export function okConfirm(){
+  return {
+    type: OK_CONFIRM
+  }
+}
+
+export function cancelConfirm(){
+  return {
+    type: CANCEL_CONFIRM,
+  }
+}
+
 const initialState = {
   dialog: {
     isShow: false,
@@ -59,9 +91,14 @@ const initialState = {
     category: undefined
   },
   alert: {
-    isShow : false,
+    isShow: false,
     contents: '',
     category: undefined
+  },
+  confirm: {
+    isShow: false,
+    title: '',
+    contents: ''
   }
 }
 
@@ -95,6 +132,16 @@ export function baseReducer(state = initialState, action: ActionType){
     case INIT_ALERT:
       return produce(state, draft => {
         draft.alert = initialState.alert
+      })
+    case OPEN_CONFIRM:
+      return produce(state, draft => {
+        draft.confirm.isShow = true
+        draft.confirm.title = action.payload.title
+        draft.confirm.contents = action.payload.contents
+      })
+    case CLOSE_CONFIRM:
+      return produce(state, draft => {
+        draft.confirm = initialState.confirm
       })
     default:
       return state

@@ -1,17 +1,16 @@
-import React, { useContext } from 'react'
-import clsx from 'clsx';
-import { Fab, ButtonGroup, Button, Tooltip, Popper, Grow, Paper, ClickAwayListener, MenuList, MenuItem, Avatar, makeStyles } from '@material-ui/core'
-import '../../App.css';
-import { shallowEqual, useSelector, useDispatch } from 'react-redux';
-import * as game from '../../store/reducer/game';
-import { WebSocketContext } from '../../hoc/WebSocketProvider';
+import { Avatar, Button, ButtonGroup, ClickAwayListener, Fab, Grow, makeStyles, MenuItem, MenuList, Paper, Popper, Tooltip } from '@material-ui/core';
+import { blue, green, red } from '@material-ui/core/colors';
 import ExitToAppSharpIcon from '@material-ui/icons/ExitToAppSharp';
-import RefreshOutlinedIcon from '@material-ui/icons/RefreshOutlined';
 import GroupOutlinedIcon from '@material-ui/icons/GroupOutlined';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import { red, green, blue} from '@material-ui/core/colors'
-import * as draw from '../../store/reducer/draw';
+import RefreshOutlinedIcon from '@material-ui/icons/RefreshOutlined';
+import clsx from 'clsx';
+import React, { useContext } from 'react';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import '../../App.css';
+import { WebSocketContext } from '../../hoc/WebSocketProvider';
 import * as base from '../../store/reducer/base';
+import * as draw from '../../store/reducer/draw';
+import * as game from '../../store/reducer/game';
 
 const useStyles = makeStyles((theme) => ({
   colorBox: {
