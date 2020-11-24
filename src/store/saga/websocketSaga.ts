@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery, delay } from "redux-saga/effects";
+import { call, put, select, takeEvery, delay, throttle, debounce, take } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
 import { history } from '../configureStore';
 import * as draw from '../reducer/draw';
@@ -23,7 +23,10 @@ function* messageHandler(action: websocket.ActionType){
         yield put(user.removeUser(message.sender))
         break;
       case 'CHAT':
-        message.sender.chat = message.chat;
+        message.sender.chat = message.chat
+        yield put(user.chat(message.sender))
+        yield delay(3500)
+        message.sender.chat = undefined
         yield put(user.chat(message.sender))
         break;
       case 'DRAW':
