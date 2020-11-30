@@ -1,11 +1,11 @@
-import { call, put, select, takeEvery, delay, throttle, debounce, take } from "redux-saga/effects";
+import { call, delay, put, select, takeEvery } from "redux-saga/effects";
 import defaultClient from "../../lib/defaultClient";
 import { history } from '../configureStore';
+import * as base from '../reducer/base';
 import * as draw from '../reducer/draw';
+import * as game from '../reducer/game';
 import * as user from '../reducer/user';
 import * as websocket from '../reducer/websocket';
-import * as game from '../reducer/game';
-import * as base from '../reducer/base';
 
 function* messageHandler(action: websocket.ActionType){
   try{
@@ -80,20 +80,6 @@ function* messageHandler(action: websocket.ActionType){
   }
 }
 
-function* disconnect(action: websocket.ActionType){
-  try{
-    //TODO: leave myself case
-    const userId = action.payload;
-    const joinRes = yield call([defaultClient, 'post'], '/leave', {
-      user: {
-        id: userId
-      }
-    });
-  } catch(error){
-
-  }
-}
-
 function* reqCreateRoom(action: websocket.ActionType){
   try{
     const name = action.payload;
@@ -162,7 +148,6 @@ function* reqJoinRoom(action: websocket.ActionType){
 
 export default function* watchWebsocket() {
   yield takeEvery(websocket.ON_MESSAGE_SUCCESS, messageHandler);
-  yield takeEvery(websocket.DISCONNECT, disconnect);
   yield takeEvery(websocket.REQ_CREATE_ROOM, reqCreateRoom);
   yield takeEvery(websocket.REQ_JOIN_ROOM, reqJoinRoom);
 }
