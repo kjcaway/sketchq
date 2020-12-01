@@ -82,6 +82,9 @@ function CanvasContainer({ width, height }: CanvasProps) {
 
   const startPaint = useCallback((event: MouseEvent) => {
     const coordinates = getCoordinates(event);
+
+    elementBlur()
+
     if (coordinates) {
       setIsPainting(true);
       setMousePosition(coordinates);
@@ -92,6 +95,7 @@ function CanvasContainer({ width, height }: CanvasProps) {
     (event: MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
+      
 
       if (isPainting) {
         const newMousePosition = getCoordinates(event);
@@ -112,16 +116,21 @@ function CanvasContainer({ width, height }: CanvasProps) {
 
   const startTouch = useCallback((event: TouchEvent) => {
     event.preventDefault();
+    
+    elementBlur()
+
     if (!canvasRef.current) {
       return;
     }
     const canvas: HTMLCanvasElement = canvasRef.current;
+    
     var touch = event.touches[0];
     var mouseEvent = new MouseEvent("mousedown", {
       clientX: touch.clientX,
       clientY: touch.clientY
     });
     canvas.dispatchEvent(mouseEvent);
+    
   }, []);
 
   const touch = useCallback(
@@ -161,6 +170,10 @@ function CanvasContainer({ width, height }: CanvasProps) {
     canvas.getContext('2d')!!.clearRect(0, 0, canvas.width, canvas.height);
 
     dispatch({type: draw.INIT})
+  }
+
+  const elementBlur = () => {
+    (document.activeElement as HTMLElement).blur()
   }
 
   useEffect(() => {
