@@ -11,12 +11,12 @@ const LayoutTemplate = ({ children, maxWidth }: Props) => {
   return (
     <Container
       maxWidth="xl"
-      style={{ paddingLeft: 0, paddingRight: 0, height: "100%", position: "absolute"}}
+      style={{ paddingLeft: 0, paddingRight: 0}}
     >
       <CssBaseline />
-      <Container component="main" maxWidth={maxWidth} style={{ height: "100%"}}>
+      <React.Fragment>
         {children}
-      </Container>
+      </React.Fragment>
     </Container>
   )
 }
